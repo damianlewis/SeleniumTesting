@@ -1,0 +1,20 @@
+{
+    "name": "damianlewis/seleniumtesting",
+    "description": "An API for phpunit-selenium based on Laravel's integrated testing framework",
+    "authors": [
+        {
+            "name": "Damian Lewis",
+            "email": "damian@damianlewis.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "phpunit/phpunit": "~5.0",
+        "phpunit/phpunit-selenium": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SeleniumTesting\\": "src/"
+        }
+    }
+}
