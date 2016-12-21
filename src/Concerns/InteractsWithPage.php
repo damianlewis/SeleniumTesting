@@ -207,7 +207,7 @@ trait InteractsWithPage
     }
 
     /**
-     * Click a link with the given text value, name, or ID attribute.
+     * Click a link with the given link text, ID or class attribute.
      *
      * @param string $name
      *
@@ -218,7 +218,7 @@ trait InteractsWithPage
         $link = $this->crawler()->selectLink($name);
 
         if (! $link) {
-            throw new InvalidArgumentException("Could not find a link with a body, name, or ID attribute of [{$name}].");
+            throw new InvalidArgumentException("Could not find a link with the text, ID or class attribute of [{$name}].");
         }
 
         $link->click();
@@ -227,7 +227,7 @@ trait InteractsWithPage
     }
 
     /**
-     * Fill an input text field with the given text.
+     * Fill a text field with the given text.
      *
      * @param string $text
      * @param string $element
@@ -236,10 +236,10 @@ trait InteractsWithPage
      */
     protected function type(string $text, string $element)
     {
-        $textField = $this->crawler()->selectInput($element);
+        $textField = $this->crawler()->selectTextField($element);
 
         if (! $textField) {
-            throw new InvalidArgumentException("Could not find any input elements with a name or ID attribute of [{$element}].");
+            throw new InvalidArgumentException("Could not find any text field elements with a name or ID attribute of [{$element}].");
         }
 
         $textField->value($text);

@@ -66,7 +66,11 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      */
     protected function tearDown()
     {
-        parent::tearDown();
+        if ($this->app) {
+            $this->app->flush();
+
+            $this->app = null;
+        }
     }
 
     /**

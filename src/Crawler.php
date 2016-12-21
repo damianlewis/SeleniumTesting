@@ -97,26 +97,22 @@ class Crawler implements Countable, IteratorAggregate
 
             if (starts_with($query, '//')) {
                 $nodes = $this->filterByXPath($query);
-            }
-
-            if (empty($nodes)) {
+            } elseif (starts_with($query, '#') || starts_with($query, '.')) {
                 $nodes = $this->filterByCss($query);
-            }
-
-            if (empty($nodes)) {
+            } else {
                 $nodes = $this->filterById($query);
-            }
 
-            if (empty($nodes)) {
-                $nodes = $this->filterByName($query);
-            }
+                if (empty($nodes)) {
+                    $nodes = $this->filterByName($query);
+                }
 
-            if (empty($nodes)) {
-                $nodes = $this->filterByClass($query);
-            }
+                if (empty($nodes)) {
+                    $nodes = $this->filterByClass($query);
+                }
 
-            if (empty($nodes)) {
-                $nodes = $this->filterByTag($query);
+                if (empty($nodes)) {
+                    $nodes = $this->filterByTag($query);
+                }
             }
 
             $crawler->nodes = array_merge($crawler->nodes, $nodes);
@@ -125,8 +121,72 @@ class Crawler implements Countable, IteratorAggregate
         return $crawler;
     }
 
+    public function selectElements(string $name = '*')
+    {
+        return $this->filterByXPath("//{$name}");
+    }
+
+    public function selectElementsByAttribute(string $name, array $attributes = [], array $constraints = [])
+    {
+        $elements = [];
+
+        if (empty($attributes)) {
+            return $elements;
+        }
+
+        if (empty($constraints)) {
+            $elements = $this->selectElementsByAttribute($name, $attributes, ['*']);
+        }
+
+        foreach ($constraints as $constraint) {
+            if (starts_with($name, '#') || starts_with($name, '.')) {
+                $name = $this->stripCssSelectorCharacter($name);
+            }
+
+            foreach ($attributes as $attribute) {
+                if (empty($elements)) {
+                    $elements = $this->filterByXPath("//{$constraint}[@{$attribute}='{$name}']");
+                }
+            }
+        }
+
+        return $elements;
+    }
+
+    public function selectElementsWithText(string $text, string $name = null, array $attributes = [], array $constraints = [])
+    {
+        $elements = [];
+
+        if (empty($constraints)) {
+            $elements = $this->selectElementsWithText($text, $name, $attributes, ['*']);
+        }
+
+        foreach ($constraints as $constraint) {
+            if (starts_with($name, '#') || starts_with($name, '.')) {
+                $name = $this->stripCssSelectorCharacter($name);
+            }
+
+            if (empty($attributes)) {
+                $elements = $this->filterByXPath("//{$constraint}[contains(text(),'{$text}')]");
+            } else {
+                if (is_null($name)) {
+                    return $elements;
+                }
+
+                foreach ($attributes as $attribute) {
+                    if (empty($elements)) {
+                        $elements = $this->filterByXPath("//{$constraint}[@{$attribute}='{$name}'][contains(text(),'{$text}')]]");
+                    }
+                }
+            }
+
+        }
+
+        return $elements;
+    }
+
     /**
-     * Select any html links by the given link text, id or name attribute.
+     * Select any html links by the given link text, id or class attribute.
      *
      * @param string $name
      *
@@ -136,116 +196,151 @@ class Crawler implements Countable, IteratorAggregate
     {
         $links = [];
 
-        $query = $this->formatQuery($name);
+        $links = $this->filterByLinkText($name);
 
         if (empty($links)) {
-            $links = $this->filterByLinkText($name);
-        }
-
-        if (empty($links)) {
-            $links = $this->filterByXPath("//a[@id='{$query}']");
-        }
-
-        if (empty($links)) {
-            $links = $this->filterByXPath("//a[@name='{$query}']");
+            $links = $this->selectElementsByAttribute($name, ['id', 'class'], ['a']);
         }
 
         return $links;
     }
 
+//    /**
+//     * Select any html elements by the given body text, id or class attribute.
+//     *
+//     * @param string $name
+//     * @param array  $constraints
+//     *
+//     * @return mixed|null
+//     *
+//     */
+//    public function selectElements(string $name, array $constraints = [])
+//    {
+//        $elements = [];
+//
+//        if (empty($constraints)) {
+//            $elements = $this->selectElementsByNameOrId($name, ['*']);
+//        } else {
+//            foreach ($constraints as $constraint) {
+//                if (starts_with($name, '#') || starts_with($name, '.')) {
+//                    $name = $this->stripCssSelectorCharacter($name);
+//                }
+//
+//                $elements = $this->filterByXPath("//{$constraint}[contains(text(), '{$name}')]");
+//
+//                if (empty($elements)) {
+//                    $elements = $this->filterByXPath("//{$constraint}[@id='{$name}']");
+//                }
+//
+//                if (empty($elements)) {
+//                    $elements = $this->filterByXPath("//{$constraint}[@class='{$name}']");
+//                }
+//            }
+//        }
+//
+//
+//        return $elements;
+//    }
+
+//    /**
+//     * Select any html form elements by the given body text, name, id or class attribute.
+//     *
+//     * @param string $name
+//     * @param array  $constraints
+//     *
+//     * @return mixed|null
+//     *
+//     */
+//    public function selectFormElements(string $name, array $constraints = [], string $type = '')
+//    {
+//        $elements = [];
+//
+//        if (empty($constraints)) {
+//            $elements = $this->selectElementsByNameOrId($name, ['*']);
+//        } else {
+//            foreach ($constraints as $constraint) {
+//                if (starts_with($name, '#') || starts_with($name, '.')) {
+//                    $elements = $this->filterByCss($name);
+//                } else {
+//                    if (empty($elements)) {
+//                        $elements = $this->filterByXPath("//{$constraint}[@name='{$name}']");
+//                    }
+//
+//                    if (empty($elements)) {
+//                        $elements = $this->filterByXPath("//{$constraint}[@id='{$name}']");
+//                    }
+//
+//                    if (empty($elements)) {
+//                        $elements = $this->filterByXPath("//{$constraint}[@class='{$name}']");
+//                    }
+//                }
+//            }
+//        }
+//
+//        return $elements;
+//    }
+
+//    /**
+//     * Select any html buttons by the given button text, id or name attribute.
+//     *
+//     * @param string $name
+//     *
+//     * @return array|null
+//     */
+//    public function selectButtons(string $name)
+//    {
+//        $buttons = [];
+//
+//        $query = $this->stripCssSelectorCharacter($name);
+//
+//        if (empty($buttons)) {
+//            $buttons = $this->filterByXPath("//button[contains(text(), '{$query}')]");
+//        }
+//
+//        if (empty($buttons)) {
+//            $buttons = $this->filterByXPath("//button[@name='{$query}']");
+//        }
+//
+//        if (empty($buttons)) {
+//            $buttons = $this->filterByXPath("//button[@id='{$query}']");
+//        }
+//
+//        return $buttons;
+//    }
+
+//    /**
+//     * Select any html elements by the given element text or id attribute.
+//     *
+//     * @param string $name
+//     * @param array  $constraints
+//     *
+//     * @return mixed|null
+//     */
+//    public function selectElementsByTextOrId(string $name, array $constraints = [])
+//    {
+//        $elements = [];
+//
+//        $query = $this->stripCssSelectorCharacter($name);
+//
+//        if (empty($constraints)) {
+//            $elements = $this->selectElementsByTextOrId($name, ['*']);
+//        } else {
+//            foreach ($constraints as $constraint) {
+//                if (empty($elements)) {
+//                    $elements = $this->filterByXPath("//{$constraint}[contains(text(), '{$query}')]");
+//                }
+//
+//                if (empty($elements)) {
+//                    $elements = $this->filterByXPath("//{$constraint}[@id='{$query}']");
+//                }
+//            }
+//        }
+//
+//        return $elements;
+//    }
+
     /**
-     * Select any html buttons by the given button text, id or name attribute.
-     *
-     * @param string $name
-     *
-     * @return array|null
-     */
-    public function selectButtons(string $name)
-    {
-        $buttons = [];
-
-        $query = $this->formatQuery($name);
-
-        if (empty($buttons)) {
-            $buttons = $this->filterByXPath("//button[contains(text(), '{$query}')]");
-        }
-
-        if (empty($buttons)) {
-            $buttons = $this->filterByXPath("//button[@id='{$query}']");
-        }
-
-        if (empty($buttons)) {
-            $buttons = $this->filterByXPath("//button[@name='{$query}']");
-        }
-
-        return $buttons;
-    }
-
-    /**
-     * Select any html elements by the given name or id attribute.
-     *
-     * @param string $name
-     * @param array  $constraints
-     *
-     * @return mixed|null
-     *
-     */
-    public function selectElementsByNameOrId(string $name, array $constraints = [])
-    {
-        $elements = [];
-
-        $query = $this->formatQuery($name);
-
-        if (empty($constraints)) {
-            $elements = $this->selectElementsByNameOrId($name, ['*']);
-        } else {
-            foreach ($constraints as $constraint) {
-                if (empty($elements)) {
-                    $elements = $this->filterByXPath("//{$constraint}[@name='{$query}']");
-                }
-
-                if (empty($elements)) {
-                    $elements = $this->filterByXPath("//{$constraint}[@id='{$query}']");
-                }
-            }
-        }
-
-        return $elements;
-    }
-
-    /**
-     * Select any html elements by the given element text or id attribute.
-     *
-     * @param string $name
-     * @param array  $constraints
-     *
-     * @return mixed|null
-     */
-    public function selectElementsByTextOrId(string $name, array $constraints = [])
-    {
-        $elements = [];
-
-        $query = $this->formatQuery($name);
-
-        if (empty($constraints)) {
-            $elements = $this->selectElementsByTextOrId($name, ['*']);
-        } else {
-            foreach ($constraints as $constraint) {
-                if (empty($elements)) {
-                    $elements = $this->filterByXPath("//{$constraint}[contains(text(), '{$query}')]");
-                }
-
-                if (empty($elements)) {
-                    $elements = $this->filterByXPath("//{$constraint}[@id='{$query}']");
-                }
-            }
-        }
-
-        return $elements;
-    }
-
-    /**
-     * Select the first html link by the given link text, id or name attribute.
+     * Select the first html link by the given selector name.
      *
      * @param string $name
      *
@@ -254,6 +349,18 @@ class Crawler implements Countable, IteratorAggregate
     public function selectLink(string $name)
     {
         return array_first($this->selectLinks($name));
+    }
+
+    /**
+     * Select the first text field element by the given selector name.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function selectTextField(string $name)
+    {
+        return array_first($this->selectElementsByAttribute($name, ['name', 'id'], ['input', 'textarea']));
     }
 
     /**
@@ -278,18 +385,6 @@ class Crawler implements Countable, IteratorAggregate
     public function selectElement(string $name)
     {
         return array_first($this->selectElementsByTextOrId($name));
-    }
-
-    /**
-     * Select the first text input field element by the given name or id attribute.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function selectInput(string $name)
-    {
-        return array_first($this->selectElementsByNameOrId($name, ['input']));
     }
 
     /**
@@ -335,34 +430,6 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Filter the elements by id attribute.
-     *
-     * @param string $selector
-     *
-     * @return mixed
-     */
-    private function filterById(string $selector)
-    {
-        $elements = $this->document->elements($this->document->using('id')->value($selector));
-
-        return $elements;
-    }
-
-    /**
-     * Filter the elements by class attribute.
-     *
-     * @param $selector
-     *
-     * @return mixed
-     */
-    private function filterByClass(string $selector)
-    {
-        $elements = $this->document->elements($this->document->using('class name')->value($selector));
-
-        return $elements;
-    }
-
-    /**
      * Filter the elements using an xPath descriptor.
      *
      * @param $selector
@@ -391,6 +458,20 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
+     * Filter the elements by id attribute.
+     *
+     * @param string $selector
+     *
+     * @return mixed
+     */
+    private function filterById(string $selector)
+    {
+        $elements = $this->document->elements($this->document->using('id')->value($selector));
+
+        return $elements;
+    }
+
+    /**
      * Filter the elements by name attribute.
      *
      * @param $selector
@@ -400,6 +481,20 @@ class Crawler implements Countable, IteratorAggregate
     private function filterByName(string $selector)
     {
         $elements = $this->document->elements($this->document->using('name')->value($selector));
+
+        return $elements;
+    }
+
+    /**
+     * Filter the elements by class attribute.
+     *
+     * @param $selector
+     *
+     * @return mixed
+     */
+    private function filterByClass(string $selector)
+    {
+        $elements = $this->document->elements($this->document->using('class name')->value($selector));
 
         return $elements;
     }
@@ -433,13 +528,13 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Strip out any leading hash or period characters from the query.
+     * Strip out any leading css selector characters.
      *
      * @param $selector
      *
      * @return string
      */
-    private function formatQuery($selector)
+    private function stripCssSelectorCharacter($selector)
     {
         $selector = ltrim($selector, '#');
         $selector = ltrim($selector, '.');

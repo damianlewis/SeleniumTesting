@@ -41,7 +41,7 @@ class HasInElement extends PageConstraint
      */
     public function matches($crawler)
     {
-        $elements = $this->crawler($crawler)->filter($this->getSelector());
+        $elements = $this->crawler($crawler)->filter($this->selector);
 
         foreach ($elements as $element) {
             if (str_contains($element->text(), $this->text)) {
@@ -70,20 +70,5 @@ class HasInElement extends PageConstraint
     protected function getReverseFailureDescription()
     {
         return sprintf('[%s] does not contain %s', $this->selector, $this->text);
-    }
-
-    /**
-     * Get the selector that's relevant to the constraint.
-     *
-     * @return string
-     */
-    private function getSelector()
-    {
-        $selector = $this->selector;
-
-        $selector = ltrim($selector, '#');
-        $selector = ltrim($selector, '.');
-
-        return $selector;
     }
 }

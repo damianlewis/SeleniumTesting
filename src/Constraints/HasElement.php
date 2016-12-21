@@ -58,7 +58,7 @@ class HasElement extends PageConstraint
      */
     public function matches($crawler)
     {
-        $elements = $this->crawler($crawler)->filter($this->getSelector());
+        $elements = $this->crawler($crawler)->filter($this->selector);
 
         if ($elements->count() == 0) {
             return false;
@@ -117,20 +117,5 @@ class HasElement extends PageConstraint
         }
 
         return true;
-    }
-
-    /**
-     * Get the selector that's relevant to the constraint.
-     *
-     * @return string
-     */
-    private function getSelector()
-    {
-        $selector = $this->selector;
-
-        $selector = ltrim($selector, '#');
-        $selector = ltrim($selector, '.');
-
-        return $selector;
     }
 }

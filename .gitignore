@@ -1,3 +1,13 @@
-/vendor/
-/composer.lock
-/.idea/
+vendor/
+.idea/
+_ide_helper.php
+.phpstorm.meta.php
+composer.lock
+.vagrant/
+Vagrantfile
+Homestead.yaml
+Homestead.json
+after.sh
+aliases
+scripts/
+firefox/
