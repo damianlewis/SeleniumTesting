@@ -121,11 +121,29 @@ class Crawler implements Countable, IteratorAggregate
         return $crawler;
     }
 
+    /**
+     * Select any elements that match the given tag name.
+     * If no name is provided all elements in the document are returned.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
     public function selectElements(string $name = '*')
     {
         return $this->filterByXPath("//{$name}");
     }
 
+    /**
+     * Select any html elements by the given attributes where the attributes match the given name.
+     * The selected elements can be filtered by the given constraints (tag names).
+
+     * @param string $name
+     * @param array  $attributes
+     * @param array  $constraints
+     *
+     * @return array|mixed
+     */
     public function selectElementsByAttribute(string $name, array $attributes = [], array $constraints = [])
     {
         $elements = [];
@@ -153,12 +171,29 @@ class Crawler implements Countable, IteratorAggregate
         return $elements;
     }
 
-    public function selectElementsWithText(string $text, string $name = null, array $attributes = [], array $constraints = [])
-    {
+    /**
+     * Select any html elements by the given text.
+     * The selected elements can be filtered by:
+     * - The given constraints (tag names)
+     * - The given attributes where the attributes match the given name.
+     *
+     * @param string      $text
+     * @param array       $constraints
+     * @param string|null $name
+     * @param array       $attributes
+     *
+     * @return array|mixed
+     */
+    public function selectElementsWithText(
+        string $text,
+        array $constraints = [],
+        string $name = null,
+        array $attributes = []
+    ) {
         $elements = [];
 
         if (empty($constraints)) {
-            $elements = $this->selectElementsWithText($text, $name, $attributes, ['*']);
+            $elements = $this->selectElementsWithText($text, ['*'], $name, $attributes);
         }
 
         foreach ($constraints as $constraint) {
@@ -199,10 +234,30 @@ class Crawler implements Countable, IteratorAggregate
         $links = $this->filterByLinkText($name);
 
         if (empty($links)) {
-            $links = $this->selectElementsByAttribute($name, ['id', 'class'], ['a']);
+            $links = $this->selectElementsByAttribute($name, ['id'], ['a']);
         }
 
         return $links;
+    }
+
+    /**
+     * Select any html buttons by the given button text, name or id attribute.
+     *
+     * @param string $name
+     *
+     * @return array|mixed
+     */
+    public function selectButtons(string $name)
+    {
+        $buttons = [];
+
+        $buttons = $this->selectElementsWithText($name, ['button']);
+
+        if (empty($buttons)) {
+            $buttons = $this->selectElementsByAttribute($name, ['name', 'id'], ['button']);
+        }
+
+        return $buttons;
     }
 
 //    /**
@@ -281,34 +336,6 @@ class Crawler implements Countable, IteratorAggregate
 //    }
 
 //    /**
-//     * Select any html buttons by the given button text, id or name attribute.
-//     *
-//     * @param string $name
-//     *
-//     * @return array|null
-//     */
-//    public function selectButtons(string $name)
-//    {
-//        $buttons = [];
-//
-//        $query = $this->stripCssSelectorCharacter($name);
-//
-//        if (empty($buttons)) {
-//            $buttons = $this->filterByXPath("//button[contains(text(), '{$query}')]");
-//        }
-//
-//        if (empty($buttons)) {
-//            $buttons = $this->filterByXPath("//button[@name='{$query}']");
-//        }
-//
-//        if (empty($buttons)) {
-//            $buttons = $this->filterByXPath("//button[@id='{$query}']");
-//        }
-//
-//        return $buttons;
-//    }
-
-//    /**
 //     * Select any html elements by the given element text or id attribute.
 //     *
 //     * @param string $name
@@ -364,7 +391,7 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Select the first html button by the given link text, id or name attribute.
+     * Select the first html button by the given selector name.
      *
      * @param string $name
      *

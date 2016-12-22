@@ -207,7 +207,7 @@ trait InteractsWithPage
     }
 
     /**
-     * Click a link with the given link text, ID or class attribute.
+     * Click a link with the given link text or id attribute.
      *
      * @param string $name
      *
@@ -218,7 +218,7 @@ trait InteractsWithPage
         $link = $this->crawler()->selectLink($name);
 
         if (! $link) {
-            throw new InvalidArgumentException("Could not find a link with the text, ID or class attribute of [{$name}].");
+            throw new InvalidArgumentException("Could not find a link with the text or id attribute of [{$name}].");
         }
 
         $link->click();
@@ -248,7 +248,7 @@ trait InteractsWithPage
     }
 
     /**
-     * Press a button with the given text value, name, or ID attribute.
+     * Press a button with the given button text, name or ID attribute.
      *
      * @param string $name
      *
@@ -259,7 +259,7 @@ trait InteractsWithPage
         $button = $this->crawler()->selectButton($name);
 
         if (! $button) {
-            throw new InvalidArgumentException("Could not find a button with a body, name, or ID attribute of [{$name}].");
+            throw new InvalidArgumentException("Could not find a button with the text, name or ID attribute of [{$name}].");
         }
 
         $button->click();

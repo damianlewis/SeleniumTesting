@@ -205,13 +205,6 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_click_a_given_link_using_a_class_css_selector()
-    {
-        $this->visit('/login')
-            ->click('.registerLinkClass');
-    }
-
-    /** @test */
     public function it_can_click_a_given_link_using_an_id_attribute()
     {
         $this->visit('/login')
@@ -219,28 +212,21 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_click_a_given_link_using_a_class_attribute()
-    {
-        $this->visit('/login')
-            ->click('registerLinkClass');
-    }
-
-    /** @test */
-    public function it_can_type_text_into_a_text_input_using_an_id_css_selector()
+    public function it_can_type_text_into_an_input_using_an_id_css_selector()
     {
         $this->visit('/login')
             ->type('Some test text', '#testTextInput');
     }
 
     /** @test */
-    public function it_can_type_text_into_a_text_input_using_a_name_attribute()
+    public function it_can_type_text_into_an_input_using_a_name_attribute()
     {
         $this->visit('/login')
             ->type('Some test text', 'test-text-input');
     }
 
     /** @test */
-    public function it_can_type_text_into_a_text_input_using_an_id_attribute()
+    public function it_can_type_text_into_an_input_using_an_id_attribute()
     {
         $this->visit('/login')
             ->type('Some test text', 'testTextInput');
@@ -265,5 +251,33 @@ class InteractsWithPageTest extends \SeleniumTestCase
     {
         $this->visit('/login')
             ->type('Some test text', 'testTextArea');
+    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_the_button_text()
+    {
+        $this->visit('/login')
+            ->press('Login');
+    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_an_id_css_selector()
+    {
+        $this->visit('/login')
+            ->press('#submitButton');
+    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_an_name_attribute()
+    {
+        $this->visit('/login')
+            ->press('submit');
+    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_an_id_attribute()
+    {
+        $this->visit('/login')
+            ->press('submitButton');
     }
 }
