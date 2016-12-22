@@ -2,7 +2,7 @@
 
 namespace SeleniumTesting\Constraints;
 
-use PHPUnit_Extensions_Selenium2TestCase_Element as SeleniumElement;
+use PHPUnit_Extensions_Selenium2TestCase_Element as Selenium2Element;
 
 class HasElement extends PageConstraint
 {
@@ -42,7 +42,7 @@ class HasElement extends PageConstraint
      * @param array  $attributes
      * @param int    $count
      */
-    public function __construct(string $selector, array $attributes = [], int $count = null)
+    public function __construct($selector, array $attributes = [], $count = null)
     {
         $this->selector = $selector;
         $this->attributes = $attributes;
@@ -104,11 +104,11 @@ class HasElement extends PageConstraint
     /**
      * Determines if the given element has the attributes.
      *
-     * @param SeleniumElement $element
+     * @param Selenium2Element $element
      *
      * @return bool
      */
-    private function hasAttributes(SeleniumElement $element)
+    private function hasAttributes(Selenium2Element $element)
     {
         foreach ($this->attributes as $name => $value) {
             if ($element->attribute($name) != $value) {

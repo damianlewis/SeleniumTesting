@@ -26,7 +26,7 @@ class HasInElement extends PageConstraint
      * @param  string $text
      *
      */
-    public function __construct(string $selector, string $text)
+    public function __construct($selector, $text)
     {
         $this->selector = $selector;
         $this->text = $text;

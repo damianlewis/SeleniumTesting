@@ -17,7 +17,7 @@ class HasSource extends PageConstraint
      *
      * @param string $source
      */
-    public function __construct(string $source)
+    public function __construct($source)
     {
         $this->source = $source;
     }
