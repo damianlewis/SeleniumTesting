@@ -280,4 +280,25 @@ class InteractsWithPageTest extends \SeleniumTestCase
         $this->visit('/login')
             ->press('submitButton');
     }
+
+    /** @test */
+    public function it_can_click_a_given_element_using_the_element_text()
+    {
+        $this->visit('/login')
+            ->clickOnElement('Test Text Input');
+    }
+
+    /** @test */
+    public function it_can_click_a_given_element_using_an_id_css_selector()
+    {
+        $this->visit('/login')
+            ->clickOnElement('#testTextInputLabel');
+    }
+
+    /** @test */
+    public function it_can_click_a_given_element_using_an_id_attribute()
+    {
+        $this->visit('/login')
+            ->clickOnElement('testTextInputLabel');
+    }
 }
