@@ -95,11 +95,27 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Returns the first node of the list as HTML.
+     * Returns the text from the child nodes of the first node from the list.
      *
-     * @return string The node html
+     * @return string
      *
-     * @throws InvalidArgumentException When current node is empty
+     * @throws InvalidArgumentException
+     */
+    public function text()
+    {
+        if (empty($this->nodes)) {
+            throw new InvalidArgumentException('The current node list is empty.');
+        }
+
+        return $this->getNode(0)->text();
+    }
+
+    /**
+     * Returns the first node from the list as HTML.
+     *
+     * @return string
+     *
+     * @throws InvalidArgumentException
      */
     public function html()
     {

@@ -301,4 +301,18 @@ class InteractsWithPageTest extends \SeleniumTestCase
         $this->visit('/login')
             ->clickOnElement('testTextInputLabel');
     }
+
+    /** @test */
+    public function it_can_assert_that_a_given_text_is_seen_in_the_html()
+    {
+        $this->visit('/login')
+            ->seeText('E-Mail Address');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_given_text_is_not_seen_in_the_html()
+    {
+        $this->visit('/login')
+            ->dontSeeText('Nothing to see here');
+    }
 }

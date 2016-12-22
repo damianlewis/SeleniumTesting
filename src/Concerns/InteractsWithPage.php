@@ -4,6 +4,7 @@ namespace SeleniumTesting\Concerns;
 
 use SeleniumTesting\Constraints\HasInElement;
 use SeleniumTesting\Constraints\HasSource;
+use SeleniumTesting\Constraints\HasText;
 use SeleniumTesting\HttpException;
 use SeleniumTesting\InvalidArgumentException;
 use SeleniumTesting\Constraints\ReversePageConstraint;
@@ -164,6 +165,31 @@ trait InteractsWithPage
     public function seeElement($selector, array $attributes = [], $count = null, $negate = false)
     {
         return $this->assertInPage(new HasElement($selector, $attributes, $count), $negate);
+    }
+
+    /**
+     * Assert that a given string is seen on the current text.
+     *
+     * @param  string $text
+     * @param  bool   $negate
+     *
+     * @return $this
+     */
+    public function seeText($text, $negate = false)
+    {
+        return $this->assertInPage(new HasText($text), $negate);
+    }
+
+    /**
+     * Assert that a given string is not seen on the current text.
+     *
+     * @param  string $text
+     *
+     * @return $this
+     */
+    public function dontSeeText($text)
+    {
+        return $this->assertInPage(new HasText($text), true);
     }
 
     /**
