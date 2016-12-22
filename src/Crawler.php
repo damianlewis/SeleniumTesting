@@ -3,8 +3,8 @@
 namespace SeleniumTesting;
 
 use ArrayIterator;
+use Closure;
 use Countable;
-use InvalidArgumentException;
 use IteratorAggregate;
 use PHPUnit_Extensions_Selenium2TestCase as Selenium2TestCase;
 
@@ -19,9 +19,9 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Create a new SeleniumTestCase crawler.
      *
-     * @param null $node
-     * @param null $currentUri
-     * @param null $baseHref
+     * @param mixed|null $node
+     * @param mixed|null $currentUri
+     * @param mixed|null $baseHref
      */
     public function __construct($node = null, $currentUri = null, $baseHref = null)
     {
@@ -63,7 +63,9 @@ class Crawler implements Countable, IteratorAggregate
     /**
      *  Adds the current document to crawl through.
      *
-     * @param $node
+     * @param mixed|null $node
+     *
+     * @throws InvalidArgumentException
      */
     public function add($node)
     {
@@ -82,7 +84,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param mixed $selector
      *
-     * @return $this
+     * @return Crawler
      */
     public function filter($selector)
     {
@@ -127,9 +129,9 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $name
      *
-     * @return mixed
+     * @return array
      */
-    public function selectElements(string $name = '*')
+    public function selectElements($name = '*')
     {
         return $this->filterByXPath("//{$name}");
     }
@@ -137,14 +139,14 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Select any html elements by the given attributes where the attributes match the given name.
      * The selected elements can be filtered by the given constraints (tag names).
-
+     *
      * @param string $name
      * @param array  $attributes
      * @param array  $constraints
      *
-     * @return array|mixed
+     * @return array
      */
-    public function selectElementsByAttribute(string $name, array $attributes = [], array $constraints = [])
+    public function selectElementsByAttribute($name, array $attributes = [], array $constraints = [])
     {
         $elements = [];
 
@@ -182,14 +184,10 @@ class Crawler implements Countable, IteratorAggregate
      * @param string|null $name
      * @param array       $attributes
      *
-     * @return array|mixed
+     * @return array
      */
-    public function selectElementsWithText(
-        string $text,
-        array $constraints = [],
-        string $name = null,
-        array $attributes = []
-    ) {
+    public function selectElementsWithText($text, array $constraints = [], $name = null, array $attributes = [])
+    {
         $elements = [];
 
         if (empty($constraints)) {
@@ -225,12 +223,10 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $name
      *
-     * @return array|mixed
+     * @return array
      */
-    public function selectLinks(string $name)
+    public function selectLinks($name)
     {
-        $links = [];
-
         $links = $this->filterByLinkText($name);
 
         if (empty($links)) {
@@ -245,12 +241,10 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $name
      *
-     * @return array|mixed
+     * @return array
      */
-    public function selectButtons(string $name)
+    public function selectButtons($name)
     {
-        $buttons = [];
-
         $buttons = $this->selectElementsWithText($name, ['button']);
 
         if (empty($buttons)) {
@@ -258,6 +252,24 @@ class Crawler implements Countable, IteratorAggregate
         }
 
         return $buttons;
+    }
+
+    /**
+     * Select any html elements by the given element text or id attribute.
+     *
+     * @param string $name
+     *
+     * @return array
+     */
+    public function selectElementsByTextOrId($name)
+    {
+        $elements = $this->selectElementsWithText($name);
+
+        if (empty($elements)) {
+            $elements = $this->selectElementsByAttribute($name, ['id']);
+        }
+
+        return $elements;
     }
 
 //    /**
@@ -335,45 +347,15 @@ class Crawler implements Countable, IteratorAggregate
 //        return $elements;
 //    }
 
-//    /**
-//     * Select any html elements by the given element text or id attribute.
-//     *
-//     * @param string $name
-//     * @param array  $constraints
-//     *
-//     * @return mixed|null
-//     */
-//    public function selectElementsByTextOrId(string $name, array $constraints = [])
-//    {
-//        $elements = [];
-//
-//        $query = $this->stripCssSelectorCharacter($name);
-//
-//        if (empty($constraints)) {
-//            $elements = $this->selectElementsByTextOrId($name, ['*']);
-//        } else {
-//            foreach ($constraints as $constraint) {
-//                if (empty($elements)) {
-//                    $elements = $this->filterByXPath("//{$constraint}[contains(text(), '{$query}')]");
-//                }
-//
-//                if (empty($elements)) {
-//                    $elements = $this->filterByXPath("//{$constraint}[@id='{$query}']");
-//                }
-//            }
-//        }
-//
-//        return $elements;
-//    }
 
     /**
      * Select the first html link by the given selector name.
      *
      * @param string $name
      *
-     * @return mixed
+     * @return \PHPUnit_Extensions_Selenium2TestCase_Element
      */
-    public function selectLink(string $name)
+    public function selectLink($name)
     {
         return array_first($this->selectLinks($name));
     }
@@ -383,9 +365,9 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $name
      *
-     * @return mixed
+     * @return \PHPUnit_Extensions_Selenium2TestCase_Element
      */
-    public function selectTextField(string $name)
+    public function selectTextField($name)
     {
         return array_first($this->selectElementsByAttribute($name, ['name', 'id'], ['input', 'textarea']));
     }
@@ -395,21 +377,21 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $name
      *
-     * @return mixed
+     * @return \PHPUnit_Extensions_Selenium2TestCase_Element
      */
-    public function selectButton(string $name)
+    public function selectButton($name)
     {
         return array_first($this->selectButtons($name));
     }
 
     /**
-     * Select the first element by the given element text or id attribute.
+     * Select the first element (for clicking) by the given selector name.
      *
      * @param string $name
      *
-     * @return mixed
+     * @return \PHPUnit_Extensions_Selenium2TestCase_Element
      */
-    public function selectElement(string $name)
+    public function selectElementToClick($name)
     {
         return array_first($this->selectElementsByTextOrId($name));
     }
@@ -436,14 +418,13 @@ class Crawler implements Countable, IteratorAggregate
 
     /**
      * Reduces the list of nodes by calling an anonymous function.
-     *
      * To remove a node from the list, the anonymous function must return false.
      *
-     * @param \Closure $closure
+     * @param Closure $closure
      *
      * @return Crawler
      */
-    public function reduce(\Closure $closure)
+    public function reduce(Closure $closure)
     {
         $nodes = [];
 
@@ -459,11 +440,11 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Filter the elements using an xPath descriptor.
      *
-     * @param $selector
+     * @param string $selector
      *
-     * @return mixed
+     * @return array
      */
-    private function filterByXPath(string $selector)
+    private function filterByXPath($selector)
     {
         $elements = $this->document->elements($this->document->using('xpath')->value($selector));
 
@@ -473,11 +454,11 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Filter the elements by css selector.
      *
-     * @param $selector
+     * @param string $selector
      *
-     * @return mixed
+     * @return array
      */
-    private function filterByCss(string $selector)
+    private function filterByCss($selector)
     {
         $elements = $this->document->elements($this->document->using('css selector')->value($selector));
 
@@ -489,9 +470,9 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $selector
      *
-     * @return mixed
+     * @return array
      */
-    private function filterById(string $selector)
+    private function filterById($selector)
     {
         $elements = $this->document->elements($this->document->using('id')->value($selector));
 
@@ -501,11 +482,11 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Filter the elements by name attribute.
      *
-     * @param $selector
+     * @param string $selector
      *
-     * @return mixed
+     * @return array
      */
-    private function filterByName(string $selector)
+    private function filterByName($selector)
     {
         $elements = $this->document->elements($this->document->using('name')->value($selector));
 
@@ -515,11 +496,11 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Filter the elements by class attribute.
      *
-     * @param $selector
+     * @param string $selector
      *
-     * @return mixed
+     * @return array
      */
-    private function filterByClass(string $selector)
+    private function filterByClass($selector)
     {
         $elements = $this->document->elements($this->document->using('class name')->value($selector));
 
@@ -529,11 +510,11 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Filter the elements by tag name.
      *
-     * @param $selector
+     * @param string $selector
      *
-     * @return mixed
+     * @return array
      */
-    private function filterByTag(string $selector)
+    private function filterByTag($selector)
     {
         $elements = $this->document->elements($this->document->using('tag name')->value($selector));
 
@@ -545,9 +526,9 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param string $text
      *
-     * @return mixed
+     * @return array
      */
-    private function filterByLinkText(string $text)
+    private function filterByLinkText($text)
     {
         $elements = $this->document->elements($this->document->using('link text')->value($text));
 
@@ -557,7 +538,7 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Strip out any leading css selector characters.
      *
-     * @param $selector
+     * @param string $selector
      *
      * @return string
      */
@@ -574,7 +555,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @param array $nodes
      *
-     * @return static
+     * @return Crawler
      */
     private function createSubCrawler($nodes)
     {

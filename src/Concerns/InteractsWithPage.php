@@ -29,7 +29,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function visit(string $uri)
+    protected function visit($uri)
     {
         return $this->makeRequest($uri);
     }
@@ -37,11 +37,11 @@ trait InteractsWithPage
     /**
      * Make a request to the given URI and create a crawler instance.
      *
-     * @param  string $uri
+     * @param string $uri
      *
      * @return $this
      */
-    protected function makeRequest(string $uri)
+    protected function makeRequest($uri)
     {
         $this->url($uri);
 
@@ -59,7 +59,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function seePageIs(string $uri)
+    protected function seePageIs($uri)
     {
         $this->assertEquals(
             $this->fullUrl($uri),
@@ -77,8 +77,10 @@ trait InteractsWithPage
      * @param  string|null $message
      *
      * @return $this
+     *
+     * @throws HttpException
      */
-    protected function assertPageLoaded(string $uri, string $message = null)
+    protected function assertPageLoaded($uri, $message = null)
     {
         $statusCode = $this->getStatusCode($uri);
 
@@ -112,7 +114,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function assertInPage(PageConstraint $constraint, bool $reverse = false, string $message = '')
+    protected function assertInPage(PageConstraint $constraint, $reverse = false, $message = '')
     {
         if ($reverse) {
             $constraint = new ReversePageConstraint($constraint);
@@ -132,7 +134,7 @@ trait InteractsWithPage
      * @return $this
      *
      */
-    protected function see(string $text, bool $negate = false)
+    protected function see($text, $negate = false)
     {
         return $this->assertInPage(new HasSource($text), $negate);
     }
@@ -144,7 +146,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function dontSee(string $text)
+    protected function dontSee($text)
     {
         return $this->assertInPage(new HasSource($text), true);
     }
@@ -159,7 +161,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function seeElement(string $selector, array $attributes = [], int $count = null, bool $negate = false)
+    protected function seeElement($selector, array $attributes = [], $count = null, $negate = false)
     {
         return $this->assertInPage(new HasElement($selector, $attributes, $count), $negate);
     }
@@ -172,7 +174,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function dontSeeElement(string $selector, array $attributes = [])
+    protected function dontSeeElement($selector, array $attributes = [])
     {
         return $this->assertInPage(new HasElement($selector, $attributes), true);
     }
@@ -186,7 +188,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function seeInElement(string $element, string $text, bool $negate = false)
+    protected function seeInElement($element, $text, $negate = false)
     {
         return $this->assertInPage(new HasInElement($element, $text), $negate);
 
@@ -201,7 +203,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function dontSeeInElement(string $element, string $text)
+    protected function dontSeeInElement($element, $text)
     {
         return $this->assertInPage(new HasInElement($element, $text), true);
     }
@@ -213,7 +215,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function click(string $name)
+    protected function click($name)
     {
         $link = $this->crawler()->selectLink($name);
 
@@ -234,7 +236,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function type(string $text, string $element)
+    protected function type($text, $element)
     {
         $textField = $this->crawler()->selectTextField($element);
 
@@ -254,7 +256,7 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function press(string $name)
+    protected function press($name)
     {
         $button = $this->crawler()->selectButton($name);
 
@@ -274,12 +276,12 @@ trait InteractsWithPage
      *
      * @return $this
      */
-    protected function clickOnElement(string $name)
+    protected function clickOnElement($name)
     {
-        $element = $this->crawler()->selectElement($name);
+        $element = $this->crawler()->selectElementToClick($name);
 
         if (! $element) {
-            throw new InvalidArgumentException("Could not find an element with a body or ID attribute of [{$name}].");
+            throw new InvalidArgumentException("Could not find an element with the text or ID attribute of [{$name}].");
         }
 
         $element->click();
@@ -294,7 +296,7 @@ trait InteractsWithPage
      *
      * @return string
      */
-    protected function fullUrl(string $uri): string
+    protected function fullUrl($uri)
     {
         $baseUrl = $this->baseUrl;
 
@@ -316,7 +318,7 @@ trait InteractsWithPage
      *
      * @return string
      */
-    protected function getStatusCode(string $uri): string
+    protected function getStatusCode($uri)
     {
         $headers = get_headers($this->fullUrl($uri));
 
