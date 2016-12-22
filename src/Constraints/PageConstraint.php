@@ -11,6 +11,18 @@ abstract class PageConstraint extends PHPUnit_Framework_Constraint
 {
 
     /**
+     * Make sure we obtain the HTML from the crawler or the response.
+     *
+     * @param  Crawler|string $crawler
+     *
+     * @return string
+     */
+    protected function html($crawler)
+    {
+        return is_object($crawler) ? $crawler->html() : $crawler;
+    }
+
+    /**
      * Create a crawler instance if the given value is not already a Crawler.
      *
      * @param  Crawler|string $crawler
@@ -20,6 +32,23 @@ abstract class PageConstraint extends PHPUnit_Framework_Constraint
     protected function crawler($crawler)
     {
         return is_object($crawler) ? $crawler : new Crawler($crawler);
+    }
+
+    /**
+     * Get the escaped text pattern for the constraint.
+     *
+     * @param  string $text
+     *
+     * @return string
+     */
+    protected function getEscapedPattern($text)
+    {
+        $rawPattern = preg_quote($text, '/');
+
+        $escapedPattern = preg_quote(e($text), '/');
+
+        return $rawPattern == $escapedPattern
+            ? $rawPattern : "({$rawPattern}|{$escapedPattern})";
     }
 
     /**

@@ -6,28 +6,24 @@ use ArrayIterator;
 use Closure;
 use Countable;
 use IteratorAggregate;
-use PHPUnit_Extensions_Selenium2TestCase as Selenium2TestCase;
+use SeleniumTestCase;
+use PHPUnit_Extensions_Selenium2TestCase_Element as Selenium2TestCase_Element;
 
 class Crawler implements Countable, IteratorAggregate
 {
 
-    protected $uri;
-    private $baseHref;
     private $document;
     private $nodes = [];
 
     /**
      * Create a new SeleniumTestCase crawler.
      *
-     * @param mixed|null $node
-     * @param mixed|null $currentUri
-     * @param mixed|null $baseHref
+     * @param Selenium2TestCase $document
+     * @param mixed|null        $node
      */
-    public function __construct($node = null, $currentUri = null, $baseHref = null)
+    public function __construct($document, $node = null)
     {
-        $this->uri = $currentUri;
-        $this->baseHref = $baseHref ?: $currentUri;
-
+        $this->add($document);
         $this->add($node);
     }
 
@@ -36,28 +32,8 @@ class Crawler implements Countable, IteratorAggregate
      */
     public function clear()
     {
-        $this->nodes = [];
         $this->document = null;
-    }
-
-    /**
-     * Returns the current URI.
-     *
-     * @return string
-     */
-    public function getUri()
-    {
-        return $this->uri;
-    }
-
-    /**
-     * Returns base href.
-     *
-     * @return string
-     */
-    public function getBaseHref()
-    {
-        return $this->baseHref;
+        $this->nodes = [];
     }
 
     /**
@@ -69,14 +45,69 @@ class Crawler implements Countable, IteratorAggregate
      */
     public function add($node)
     {
-        if ($node instanceof Selenium2TestCase) {
-            $this->document = $node;
+        if ($node instanceof SeleniumTestCase) {
+            $this->addDocument($node);
+        } elseif ($node instanceof Selenium2TestCase_Element) {
+            $this->addNode($node);
         } elseif (is_array($node)) {
-            $this->nodes = $node;
+            $this->addNodes($node);
         } elseif ($node !== null) {
-            throw new InvalidArgumentException(sprintf('Expecting a PHPUnit_Extensions_Selenium2TestCase instance, array or null, but got "%s".',
+            throw new InvalidArgumentException(sprintf('Expecting a SeleniumTestCase instance, PHPUnit_Extensions_Selenium2TestCase_Element instance, array or null, but got "%s".',
                 is_object($node) ? get_class($node) : gettype($node)));
         }
+    }
+
+    /**
+     * Adds the SeleniumTestCase document containing the DOM.
+     *
+     * @param SeleniumTestCase $document
+     */
+    public function addDocument(SeleniumTestCase $document)
+    {
+        $this->document = $document;
+    }
+
+    /**
+     * Adds an array of Selenium2TestCase Element instances to the list of nodes.
+     *
+     * @param array $nodes
+     */
+    public function addNodes(array $nodes)
+    {
+        foreach ($nodes as $node) {
+            $this->add($node);
+        }
+    }
+
+    /**
+     * Adds a Selenium2TestCase Element instance to the list of nodes.
+     *
+     * @param Selenium2TestCase_Element $node
+     */
+    public function addNode(Selenium2TestCase_Element $node)
+    {
+        // Don't add duplicate nodes in the Crawler
+        if (in_array($node, $this->nodes, true)) {
+            return;
+        }
+
+        $this->nodes[] = $node;
+    }
+
+    /**
+     * Returns the first node of the list as HTML.
+     *
+     * @return string The node html
+     *
+     * @throws InvalidArgumentException When current node is empty
+     */
+    public function html()
+    {
+        if (empty($this->nodes)) {
+            throw new InvalidArgumentException('The current node list is empty.');
+        }
+
+        return $this->getNode(0)->attribute('innerHTML');
     }
 
     /**
@@ -88,7 +119,7 @@ class Crawler implements Countable, IteratorAggregate
      */
     public function filter($selector)
     {
-        $crawler = $this->createSubCrawler(null);
+        $crawler = $this->createSubCrawler($this->document, null);
 
         if (is_string($selector)) {
             $selector = [$selector];
@@ -397,6 +428,18 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
+     * @param int $position
+     *
+     * @return Selenium2TestCase_Element|null
+     */
+    public function getNode($position)
+    {
+        if (isset($this->nodes[$position])) {
+            return $this->nodes[$position];
+        }
+    }
+
+    /**
      * Return the number of filter nodes.
      *
      * @return int
@@ -444,7 +487,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterByXPath($selector)
+    protected function filterByXPath($selector)
     {
         $elements = $this->document->elements($this->document->using('xpath')->value($selector));
 
@@ -458,7 +501,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterByCss($selector)
+    protected function filterByCss($selector)
     {
         $elements = $this->document->elements($this->document->using('css selector')->value($selector));
 
@@ -472,7 +515,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterById($selector)
+    protected function filterById($selector)
     {
         $elements = $this->document->elements($this->document->using('id')->value($selector));
 
@@ -486,7 +529,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterByName($selector)
+    protected function filterByName($selector)
     {
         $elements = $this->document->elements($this->document->using('name')->value($selector));
 
@@ -500,7 +543,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterByClass($selector)
+    protected function filterByClass($selector)
     {
         $elements = $this->document->elements($this->document->using('class name')->value($selector));
 
@@ -514,7 +557,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterByTag($selector)
+    protected function filterByTag($selector)
     {
         $elements = $this->document->elements($this->document->using('tag name')->value($selector));
 
@@ -528,7 +571,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return array
      */
-    private function filterByLinkText($text)
+    protected function filterByLinkText($text)
     {
         $elements = $this->document->elements($this->document->using('link text')->value($text));
 
@@ -542,7 +585,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return string
      */
-    private function stripCssSelectorCharacter($selector)
+    protected function stripCssSelectorCharacter($selector)
     {
         $selector = ltrim($selector, '#');
         $selector = ltrim($selector, '.');
@@ -557,10 +600,9 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return Crawler
      */
-    private function createSubCrawler($nodes)
+    protected function createSubCrawler($nodes)
     {
-        $crawler = new static($nodes, $this->uri, $this->baseHref);
-        $crawler->document = $this->document;
+        $crawler = new static($this->document, $nodes);
 
         return $crawler;
     }

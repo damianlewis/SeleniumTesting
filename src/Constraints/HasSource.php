@@ -31,32 +31,18 @@ class HasSource extends PageConstraint
      */
     public function matches($crawler)
     {
-        $elements = $this->crawler($crawler)->filter($this->getSelector());
+        $pattern = $this->getEscapedPattern($this->source);
 
-        if ($elements->count() == 0) {
-            return false;
-        }
-
-        return true;
+        return preg_match("/{$pattern}/i", $this->html($crawler));
     }
 
     /**
      * Returns a string representation of the object.
      *
      * @return string
-     */
+//     */
     public function toString()
     {
         return "the HTML [{$this->source}]";
-    }
-
-    /**
-     * Get the selector that's relevant to the constraint.
-     *
-     * @return string
-     */
-    private function getSelector()
-    {
-        return "//*[contains(text(), '{$this->source}')]";
     }
 }

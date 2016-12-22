@@ -44,17 +44,17 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_a_given_string_is_seen_on_the_page()
+    public function it_can_assert_that_a_given_string_is_seen_in_the_html()
     {
         $this->visit('/login')
-            ->see('Login');
+            ->see('<label for="email" class="col-md-4 control-label">E-Mail Address</label>');
     }
 
     /** @test */
-    public function it_can_assert_that_a_given_string_is_not_seen_on_the_page()
+    public function it_can_assert_that_a_given_string_is_not_seen_in_the_html()
     {
         $this->visit('/login')
-            ->dontSee('qwerty123345');
+            ->dontSee('<span>Nothing to see here</span>');
     }
 
     /** @test */
@@ -68,7 +68,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_given_element_is_not_seen_on_the_page_using_an_id_css_selector()
     {
         $this->visit('/login')
-            ->dontSeeElement('#qwerty123345');
+            ->dontSeeElement('#nothingToSee');
     }
 
     /** @test */
@@ -82,7 +82,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_given_element_is_not_seen_on_the_page_using_a_class_css_selector()
     {
         $this->visit('/login')
-            ->dontSeeElement('.qwerty123345');
+            ->dontSeeElement('.nothing-to-see');
     }
 
     /** @test */
@@ -117,7 +117,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_given_element_is_not_seen_on_the_page_using_an_id_name_class_attribute_or_tag_name()
     {
         $this->visit('/login')
-            ->dontSeeElement('qwerty123345');
+            ->dontSeeElement('nothing-to-see');
     }
 
     /** @test */
@@ -187,7 +187,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_given_element_does_not_contain_a_given_text_value_using_a_tag_name()
     {
         $this->visit('/login')
-            ->dontSeeInElement('p', 'qwerty12345');
+            ->dontSeeInElement('p', 'nothing to see here');
     }
 
     /** @test */
