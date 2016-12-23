@@ -115,7 +115,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
     {
         $this->visit('/login')
             ->seeText('E-Mail Address')
-            ->seeText('A Text Input');
+            ->seeText('Password');
     }
 
     /** @test */
@@ -137,7 +137,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
             ->seeInElement('div.panel-heading', 'Login')
             ->seeInElement('label.control-label', 'E-Mail Address')
             ->seeInElement('p', 'Lorem ipsum dolor sit amet')
-            ->seeInElement('#aTextInputLabel', 'A Text Input');
+            ->seeInElement('#passwordLabel', 'Password');
     }
 
     /** @test */
@@ -264,41 +264,41 @@ class InteractsWithPageTest extends \SeleniumTestCase
     /** @test */
     public function it_can_assert_that_an_input_field_with_the_given_name_attribute_contains_the_given_text()
     {
-        $this->visit('/login')
-            ->seeInField('a-text-input-with-value', 'Text input with value')
-            ->seeInField('a-text-area-with-value', 'Text area with value');
+        $this->visit('/form')
+            ->seeInField('text-input-with-value', 'Text input with value')
+            ->seeInField('text-area-with-value', 'Text area with value');
     }
 
     /** @test */
     public function it_can_assert_that_an_input_field_with_the_given_id_attribute_contains_the_given_text()
     {
-        $this->visit('/login')
-            ->seeInField('#aTextInputWithValue', 'Text input with value')
-            ->seeInField('aTextInputWithValue', 'Text input with value')
-            ->seeInField('#aTextAreaWithValue', 'Text area with value')
-            ->seeInField('aTextAreaWithValue', 'Text area with value');
+        $this->visit('/form')
+            ->seeInField('#textInputWithValue', 'Text input with value')
+            ->seeInField('textInputWithValue', 'Text input with value')
+            ->seeInField('#textAreaWithValue', 'Text area with value')
+            ->seeInField('textAreaWithValue', 'Text area with value');
 
     }
 
     /** @test */
     public function it_can_assert_that_an_input_field_with_the_given_name_attribute_does_not_contain_the_given_text()
     {
-        $this->visit('/login')
-            ->dontSeeInField('a-text-input-with-value', 'Nothing to see here');
+        $this->visit('/form')
+            ->dontSeeInField('text-input-with-value', 'Nothing to see here');
     }
 
     /** @test */
     public function it_can_assert_that_an_input_field_with_the_given_id_attribute_does_not_contain_the_given_text()
     {
-        $this->visit('/login')
-            ->dontSeeInField('#aTextInputWithValue', 'Nothing to see here')
-            ->dontSeeInField('aTextInputWithValue', 'Nothing to see here');
+        $this->visit('/form')
+            ->dontSeeInField('#textInputWithValue', 'Nothing to see here')
+            ->dontSeeInField('textInputWithValue', 'Nothing to see here');
     }
 
 //    /** @test */
 //    public function it_can_click_a_given_link_using_the_link_text()
 //    {
-//        $this->visit('/login')
+//        $this->visit('/form')
 //            ->click('Register');
 //    }
 //
