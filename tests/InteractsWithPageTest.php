@@ -58,24 +58,15 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_css_id_selector()
+    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_css_selector()
     {
         $this->visit('/login')
-            ->seeElement('#app');
-    }
-
-    /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_css_class_selector()
-    {
-        $this->visit('/login')
-            ->seeElement('.panel-heading');
-    }
-
-    /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_id_attribute()
-    {
-        $this->visit('/login')
-            ->seeElement('app');
+            ->seeElement('#app')
+            ->seeElement('.panel-heading')
+            ->seeElement('form')
+            ->seeElement('input#email')
+            ->seeElement('label.control-label')
+            ->seeElement('input[type="email"]');
     }
 
     /** @test */
@@ -86,35 +77,34 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
+    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_id_attribute()
+    {
+        $this->visit('/login')
+            ->seeElement('app');
+    }
+
+    /** @test */
     public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_class_attribute()
     {
         $this->visit('/login')
-            ->seeElement('panel-heading');
+            ->seeElement('control-label');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_tag_name()
+    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_css_selector()
     {
         $this->visit('/login')
-            ->seeElement('form');
+            ->dontSeeElement('#nothingToSee')
+            ->dontSeeElement('.nothing-to-see')
+            ->dontSeeElement('input#nothingToSee')
+            ->dontSeeElement('label.nothing-to-see')
+            ->dontSeeElement('input[type="color"]')
+            ->dontSeeElement('video');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_css_id_selector()
-    {
-        $this->visit('/login')
-            ->dontSeeElement('#nothingToSee');
-    }
-
-    /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_css_class_selector()
-    {
-        $this->visit('/login')
-            ->dontSeeElement('.nothing-to-see');
-    }
-
-    /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_id_name_class_attribute_or_tag_name()
+    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_name_id_or_class_attribute_or_the_tag(
+    )
     {
         $this->visit('/login')
             ->dontSeeElement('nothing-to-see');
@@ -135,73 +125,79 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_css_id_selector_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_css_selector_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
-            ->seeInElement('#app-navbar-collapse', 'Register');
+            ->seeInElement('#app-navbar-collapse', 'Register')
+            ->seeInElement('.panel-heading', 'Login')
+            ->seeInElement('.control-label', 'E-Mail Address')
+            ->seeInElement('div#app-navbar-collapse', 'Register')
+            ->seeInElement('div.panel-heading', 'Login')
+            ->seeInElement('label.control-label', 'E-Mail Address')
+            ->seeInElement('p', 'Lorem ipsum dolor sit amet');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_css_class_selector_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_name_attribute_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
-            ->seeInElement('.panel-heading', 'Login');
+            ->seeInElement('submit', 'Login');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_id_attribute_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_id_attribute_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
             ->seeInElement('app-navbar-collapse', 'Register');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_class_attribute_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_class_attribute_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
             ->seeInElement('panel-heading', 'Login');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_seen_on_the_page_with_the_given_tag_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_css_selector_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
-            ->seeInElement('p', 'Lorem ipsum dolor sit amet');
+            ->dontSeeInElement('#app-navbar-collapse', 'Nothing')
+            ->dontSeeInElement('.panel-heading', 'Not a heading')
+            ->dontSeeInElement('.control-label', 'Not a label')
+            ->dontSeeInElement('div#app-navbar-collapse', 'Nothing')
+            ->dontSeeInElement('div.panel-heading', 'Not a heading')
+            ->dontSeeInElement('label.control-label', 'Not a label')
+            ->dontSeeInElement('p', 'Nothing to see here');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_css_id_selector_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_name_attribute_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
-            ->dontSeeInElement('#app-navbar-collapse', 'Laravel');
+            ->dontSeeInElement('submit', 'Nothing');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_css_class_selector_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_id_attribute_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
-            ->dontSeeInElement('.panel-heading', 'Password');
+            ->dontSeeInElement('app-navbar-collapse', 'Nothing');
     }
 
     /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_id_attribute_and_containing_the_given_text()
+    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_class_attribute_and_containing_the_given_text(
+    )
     {
         $this->visit('/login')
-            ->dontSeeInElement('app-navbar-collapse', 'Laravel');
-    }
-
-    /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_class_attribute_and_containing_the_given_text()
-    {
-        $this->visit('/login')
-            ->dontSeeInElement('panel-heading', 'Password');
-    }
-
-    /** @test */
-    public function it_can_assert_that_an_element_is_not_seen_on_the_page_with_the_given_tag_and_containing_the_given_text()
-    {
-        $this->visit('/login')
-            ->dontSeeInElement('p', 'nothing to see here');
+            ->dontSeeInElement('panel-heading', 'Not a heading');
     }
 
     /** @test */
@@ -219,7 +215,8 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_a_link_is_seen_on_the_page_with_the_given_link_text_and_full_url_with_trailing_slash()
+    public function it_can_assert_that_a_link_is_seen_on_the_page_with_the_given_link_text_and_full_url_with_trailing_slash(
+    )
     {
         $this->visit('/login')
             ->seeLink('Visit Laravel', 'https://laravel.com/');
@@ -233,7 +230,8 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_a_link_is_seen_on_the_page_with_the_given_link_text_and_partial_url_with_trailing_slash()
+    public function it_can_assert_that_a_link_is_seen_on_the_page_with_the_given_link_text_and_partial_url_with_trailing_slash(
+    )
     {
         $this->visit('/login')
             ->seeLink('Visit Laravel', 'laravel.com/');

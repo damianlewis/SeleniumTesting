@@ -8,6 +8,7 @@ use Countable;
 use IteratorAggregate;
 use SeleniumTestCase;
 use PHPUnit_Extensions_Selenium2TestCase_Element as Selenium2TestCase_Element;
+use PHPUnit_Extensions_Selenium2TestCase_WebDriverException as Selenium2TestCase_WebDriverException;
 
 class Crawler implements Countable, IteratorAggregate
 {
@@ -144,27 +145,29 @@ class Crawler implements Countable, IteratorAggregate
         $selectors = is_array($selectors) ? $selectors : [$selectors];
 
         foreach ($selectors as $selector) {
-            if (starts_with($selector, '//')) {
-                $elements = $this->filterByXPath($selector);
-            } elseif (starts_with($selector, '#') || starts_with($selector, '.')) {
-                $elements = $this->filterByCss($selector);
-            } else {
-                $elements = $this->filterById($selector);
+            try {
+                if (starts_with($selector, '//')) {
+                    $elements = $this->filterByXPath($selector);
+                } else {
+                    $elements = $this->filterByCss($selector);
 
-                if (empty($elements)) {
-                    $elements = $this->filterByName($selector);
+                    if (empty($elements)) {
+                        $elements = $this->filterByName($selector);
+                    }
+
+                    if (empty($elements)) {
+                        $elements = $this->filterById($selector);
+                    }
+
+                    if (empty($elements)) {
+                        $elements = $this->filterByClass($selector);
+                    }
                 }
 
-                if (empty($elements)) {
-                    $elements = $this->filterByClass($selector);
-                }
-
-                if (empty($elements)) {
-                    $elements = $this->filterByTag($selector);
-                }
+                $crawler->add($elements);
+            } catch (Selenium2TestCase_WebDriverException $e) {
+                throw new InvalidArgumentException($e->getMessage());
             }
-
-            $crawler->add($elements);
         }
 
         return $crawler;
@@ -529,20 +532,6 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Filter the elements by id attribute.
-     *
-     * @param string $selector
-     *
-     * @return array
-     */
-    protected function filterById($selector)
-    {
-        $elements = $this->document->elements($this->document->using('id')->value($selector));
-
-        return $elements;
-    }
-
-    /**
      * Filter the elements by name attribute.
      *
      * @param string $selector
@@ -557,6 +546,20 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
+     * Filter the elements by id attribute.
+     *
+     * @param string $selector
+     *
+     * @return array
+     */
+    protected function filterById($selector)
+    {
+        $elements = $this->document->elements($this->document->using('id')->value($selector));
+
+        return $elements;
+    }
+
+    /**
      * Filter the elements by class attribute.
      *
      * @param string $selector
@@ -565,21 +568,14 @@ class Crawler implements Countable, IteratorAggregate
      */
     protected function filterByClass($selector)
     {
+        // Using 'class name' with a selector that starts with '#' causes an error to be thrown.
+        // Return an empty array, as the '#' is explicitly stating to filter the document by id attribute
+        // and this is the filter for class attributes.
+        if (starts_with($selector, '#')) {
+            return [];
+        }
+
         $elements = $this->document->elements($this->document->using('class name')->value($selector));
-
-        return $elements;
-    }
-
-    /**
-     * Filter the elements by tag name.
-     *
-     * @param string $selector
-     *
-     * @return array
-     */
-    protected function filterByTag($selector)
-    {
-        $elements = $this->document->elements($this->document->using('tag name')->value($selector));
 
         return $elements;
     }
