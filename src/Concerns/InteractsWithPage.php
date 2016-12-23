@@ -3,10 +3,10 @@
 namespace SeleniumTesting\Concerns;
 
 use SeleniumTesting\Constraints\HasInElement;
+use SeleniumTesting\Constraints\HasLink;
 use SeleniumTesting\Constraints\HasSource;
 use SeleniumTesting\Constraints\HasText;
 use SeleniumTesting\HttpException;
-use SeleniumTesting\InvalidArgumentException;
 use SeleniumTesting\Constraints\ReversePageConstraint;
 use SeleniumTesting\Crawler;
 use SeleniumTesting\Constraints\HasElement;
@@ -168,6 +168,19 @@ trait InteractsWithPage
     }
 
     /**
+     * Assert that an element is not present on the page.
+     *
+     * @param string $selector
+     * @param array  $attributes
+     *
+     * @return $this
+     */
+    public function dontSeeElement($selector, array $attributes = [])
+    {
+        return $this->assertInPage(new HasElement($selector, $attributes), true);
+    }
+
+    /**
      * Assert that a given string is seen on the current text.
      *
      * @param  string $text
@@ -190,19 +203,6 @@ trait InteractsWithPage
     public function dontSeeText($text)
     {
         return $this->assertInPage(new HasText($text), true);
-    }
-
-    /**
-     * Assert that an element is not present on the page.
-     *
-     * @param string $selector
-     * @param array  $attributes
-     *
-     * @return $this
-     */
-    public function dontSeeElement($selector, array $attributes = [])
-    {
-        return $this->assertInPage(new HasElement($selector, $attributes), true);
     }
 
     /**
@@ -235,85 +235,155 @@ trait InteractsWithPage
     }
 
     /**
-     * Click a link with the given link text or id attribute.
+     * Assert that a given link is seen on the page.
      *
-     * @param string $name
+     * @param  string      $text
+     * @param  string|null $url
+     * @param  bool        $negate
      *
      * @return $this
      */
-    public function click($name)
+    public function seeLink($text, $url = null, $negate = false)
     {
-        $link = $this->crawler()->selectLink($name);
-
-        if (! $link) {
-            throw new InvalidArgumentException("Could not find a link with the text or id attribute of [{$name}].");
-        }
-
-        $link->click();
-
-        return $this;
+        return $this->assertInPage(new HasLink($text, $url), $negate);
     }
 
     /**
-     * Fill a text field with the given text.
+     * Assert that a given link is not seen on the page.
      *
-     * @param string $text
-     * @param string $element
-     *
-     * @return $this
-     */
-    public function type($text, $element)
-    {
-        $textField = $this->crawler()->selectTextField($element);
-
-        if (! $textField) {
-            throw new InvalidArgumentException("Could not find any text field elements with a name or ID attribute of [{$element}].");
-        }
-
-        $textField->value($text);
-
-        return $this;
-    }
-
-    /**
-     * Press a button with the given button text, name or ID attribute.
-     *
-     * @param string $name
+     * @param  string      $text
+     * @param  string|null $url
      *
      * @return $this
      */
-    public function press($name)
+    public function dontSeeLink($text, $url = null)
     {
-        $button = $this->crawler()->selectButton($name);
-
-        if (! $button) {
-            throw new InvalidArgumentException("Could not find a button with the text, name or ID attribute of [{$name}].");
-        }
-
-        $button->click();
-
-        return $this;
+        return $this->assertInPage(new HasLink($text, $url), true);
     }
 
-    /**
-     * Click an element with the given text value or ID attribute.
-     *
-     * @param string $name
-     *
-     * @return $this
-     */
-    public function clickOnElement($name)
-    {
-        $element = $this->crawler()->selectElementToClick($name);
+//    /**
+//     * Click a link with the given link text or id attribute.
+//     *
+//     * @param string $name
+//     *
+//     * @return $this
+//     */
+//    public function click($name)
+//    {
+////        $link = $this->crawler()->link($name);
+//        $link = $this->crawler()->selectLink($name);
+//
+//        if (! count($link)) {
+//            $link = $this->filterByNameOrId($name, 'a');
+//
+//            if (! count($link)) {
+//                throw new InvalidArgumentException(
+//                    "Could not find a link with a body, name, or ID attribute of [{$name}]."
+//                );
+//            }
+//        }
+//
+//        if (! $link) {
+//            throw new InvalidArgumentException("Could not find a link with the text or id attribute of [{$name}].");
+//        }
+//
+//        $link->click();
+//
+//        return $this;
+//    }
 
-        if (! $element) {
-            throw new InvalidArgumentException("Could not find an element with the text or ID attribute of [{$name}].");
-        }
+//    /**
+//     * Fill a text field with the given text.
+//     *
+//     * @param string $text
+//     * @param string $element
+//     *
+//     * @return $this
+//     */
+//    public function type($text, $element)
+//    {
+//        $textField = $this->crawler()->selectTextField($element);
+//
+//        if (! $textField) {
+//            throw new InvalidArgumentException("Could not find any text field elements with a name or ID attribute of [{$element}].");
+//        }
+//
+//        $textField->value($text);
+//
+//        return $this;
+//    }
 
-        $element->click();
+//    /**
+//     * Press a button with the given button text, name or ID attribute.
+//     *
+//     * @param string $name
+//     *
+//     * @return $this
+//     */
+//    public function press($name)
+//    {
+//        $button = $this->crawler()->selectButton($name);
+//
+//        if (! $button) {
+//            throw new InvalidArgumentException("Could not find a button with the text, name or ID attribute of [{$name}].");
+//        }
+//
+//        $button->click();
+//
+//        return $this;
+//    }
 
-        return $this;
-    }
+//    /**
+//     * Click an element with the given text value or ID attribute.
+//     *
+//     * @param string $name
+//     *
+//     * @return $this
+//     */
+//    public function clickOnElement($name)
+//    {
+//        $element = $this->crawler()->selectElementToClick($name);
+//
+//        if (! $element) {
+//            throw new InvalidArgumentException("Could not find an element with the text or ID attribute of [{$name}].");
+//        }
+//
+//        $element->click();
+//
+//        return $this;
+//    }
+
+//    /**
+//     * Filter elements according to the given attributes.
+//     *
+//     * @param string       $name
+//     * @param array        $attributes
+//     * @param array|string $elements
+//     *
+//     * @return \SeleniumTesting\Crawler
+//     */
+//    protected function filterByAttributes($name, array $attributes, $elements = '*')
+//    {
+////        $name = str_replace('#', '', $name);
+//
+////        $id = str_replace(['[', ']'], ['\\[', '\\]'], $name);
+//
+//        $selectors = [];
+//
+//        $elements = is_array($elements) ? $elements : [$elements];
+//
+//        foreach ($elements as $element) {
+//            foreach ($attributes as $attribute) {
+//                $selectors[] = "//{$element}[@{$attribute}='{$name}']";
+//            }
+//        }
+//
+////        array_walk($elements, function (&$element) use ($name, $id) {
+////            $element = "//{$element}[@{}], {$element}[name='{$name}']";
+////        });
+//
+//        return $this->crawler()->filter($selectors);
+//    }
 
     /**
      * Return the full url for the given uri.
@@ -324,17 +394,7 @@ trait InteractsWithPage
      */
     protected function fullUrl($uri)
     {
-        $baseUrl = $this->baseUrl;
-
-        if (! ends_with($baseUrl, '/')) {
-            $baseUrl = "{$baseUrl}/";
-        }
-
-        if ($uri == '/') {
-            return $baseUrl;
-        } else {
-            return "{$baseUrl}{$uri}";
-        }
+        return implode('/', [rtrim($this->baseUrl, '/'), trim($uri, '/')]);
     }
 
     /**
