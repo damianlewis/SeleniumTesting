@@ -22,8 +22,42 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
     protected $app;
 
     /**
-     * Creates the application.
+     * he browser to run the tests through.
      *
+     * @var string
+     */
+    protected $browser;
+
+    /**
+     * The base URL to use while testing the application.
+     *
+     * @var string
+     */
+    protected $baseUrl;
+
+    /**
+     * The host name for the connection.
+     *
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * A list of capabilities to set for the browser.
+     *
+     * @var array
+     */
+    protected $capabilities;
+
+    /**
+     * The path to the folder where screen shots of the browser will be saved.
+     *
+     * @var string
+     */
+    protected $screenShotPath;
+
+    /**
+     * Creates the application.
      * Needs to be implemented by subclasses.
      *
      * @return \Symfony\Component\HttpKernel\HttpKernelInterface
@@ -42,6 +76,7 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
 
         $this->setBrowser($this->browser);
         $this->setBrowserUrl($this->baseUrl);
+        $this->setHost($this->host);
         $this->setDesiredCapabilities($this->capabilities);
 
         if (! $this->app) {
