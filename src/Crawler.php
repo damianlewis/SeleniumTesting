@@ -81,6 +81,24 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
+     * Check if the given element exists in the elements array.
+     *
+     * @param Selenium2TestCase_Element $element
+     *
+     * @return bool
+     */
+    public function hasElement(Selenium2TestCase_Element $element)
+    {
+        $elementId = $element->getId();
+
+        $elements = array_filter($this->elements, function ($element) use ($elementId) {
+            return $element->getId() == $elementId;
+        });
+
+        return count($elements) > 0;
+    }
+
+    /**
      * Adds a Selenium2TestCase Element instance to the list of elements.
      *
      * @param Selenium2TestCase_Element $element
@@ -88,11 +106,45 @@ class Crawler implements Countable, IteratorAggregate
     public function addElement(Selenium2TestCase_Element $element)
     {
         // Don't add duplicate elements in the Crawler
-        if (in_array($element, $this->elements, true)) {
+        if ($this->hasElement($element)) {
             return;
         }
 
         $this->elements[] = $element;
+    }
+
+    /**
+     * Returns the attribute value of the first element of the list.
+     *
+     * @param string $attribute
+     *
+     * @return string|null
+     *
+     * @throws InvalidArgumentException
+     */
+    public function attribute($attribute)
+    {
+        if (! $this->elements) {
+            throw new InvalidArgumentException('The current elements list is empty.');
+        }
+
+        return $this->getElement(0)->attribute($attribute);
+    }
+
+    /**
+     * Returns the element name of the first element of the list.
+     *
+     * @return string
+     *
+     * @throws InvalidArgumentException
+     */
+    public function elementName()
+    {
+        if (! $this->elements) {
+            throw new InvalidArgumentException('The current element list is empty.');
+        }
+
+        return $this->getElement(0)->name();
     }
 
     /**
@@ -138,13 +190,11 @@ class Crawler implements Countable, IteratorAggregate
     {
         $crawler = $this->createSubCrawler($this->document, null);
 
-//        if (is_string($selector)) {
-//            $selector = [$selector];
-//        }
-
-        $selectors = is_array($selectors) ? $selectors : [$selectors];
+        $selectors = explode(',', $selectors);
 
         foreach ($selectors as $selector) {
+            $selector = trim($selector);
+
             try {
                 if (starts_with($selector, '//')) {
                     $elements = $this->filterByXPath($selector);
@@ -165,6 +215,7 @@ class Crawler implements Countable, IteratorAggregate
                 }
 
                 $crawler->add($elements);
+
             } catch (Selenium2TestCase_WebDriverException $e) {
                 throw new InvalidArgumentException($e->getMessage());
             }
@@ -554,6 +605,10 @@ class Crawler implements Countable, IteratorAggregate
      */
     protected function filterById($selector)
     {
+        if (starts_with($selector, '.')) {
+            return [];
+        }
+
         $elements = $this->document->elements($this->document->using('id')->value($selector));
 
         return $elements;

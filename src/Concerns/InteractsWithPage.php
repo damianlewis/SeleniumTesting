@@ -6,6 +6,7 @@ use SeleniumTesting\Constraints\HasInElement;
 use SeleniumTesting\Constraints\HasLink;
 use SeleniumTesting\Constraints\HasSource;
 use SeleniumTesting\Constraints\HasText;
+use SeleniumTesting\Constraints\HasValue;
 use SeleniumTesting\HttpException;
 use SeleniumTesting\Constraints\ReversePageConstraint;
 use SeleniumTesting\Crawler;
@@ -259,6 +260,33 @@ trait InteractsWithPage
     public function dontSeeLink($text, $url = null)
     {
         return $this->assertInPage(new HasLink($text, $url), true);
+    }
+
+    /**
+     * Assert that an input field contains the given value.
+     *
+     * @param  string $selector
+     * @param  string $expected
+     * @param  bool   $negate
+     *
+     * @return $this
+     */
+    public function seeInField($selector, $expected, $negate = false)
+    {
+        return $this->assertInPage(new HasValue($selector, $expected), $negate);
+    }
+
+    /**
+     * Assert that an input field does not contain the given value.
+     *
+     * @param  string $selector
+     * @param  string $value
+     *
+     * @return $this
+     */
+    public function dontSeeInField($selector, $value)
+    {
+        return $this->assertInPage(new HasValue($selector, $value), true);
     }
 
 //    /**
