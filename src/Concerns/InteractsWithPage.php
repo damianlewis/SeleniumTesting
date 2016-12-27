@@ -16,6 +16,7 @@ use SeleniumTesting\Constraints\HasElement;
 use SeleniumTesting\Constraints\PageConstraint;
 use PHPUnit_Framework_ExpectationFailedException as PHPUnitException;
 use SeleniumTesting\InvalidArgumentException;
+use PHPUnit_Extensions_Selenium2TestCase_WebDriverException as Selenium2TestCase_WebDriverException;
 
 trait InteractsWithPage
 {
@@ -407,7 +408,7 @@ trait InteractsWithPage
             throw new InvalidArgumentException("Could not find any checkbox elements with a name or ID attribute of [{$element}].");
         }
 
-        if ($checkbox->selected() == $negate) {
+        if ($checkbox->element()->selected() == $negate) {
             $checkbox->element()->click();
         } else {
             throw new InvalidArgumentException(sprintf("Checkbox element [%s] is already %s.", $element, $negate ? 'unchecked' : 'checked'));
@@ -426,6 +427,30 @@ trait InteractsWithPage
     protected function uncheck($element)
     {
         return $this->check($element, true);
+    }
+
+    /**
+     * Select an option from a drop-down.
+     *
+     * @param  string  $label
+     * @param  string  $element
+     * @return $this
+     */
+    protected function select($label, $element)
+    {
+        $select = $this->filterByNameOrId($element, 'select');
+
+        if (! count($select)) {
+            throw new InvalidArgumentException("Could not find any select elements with a name or ID attribute of [{$element}].");
+        }
+
+        try {
+            $select->element()->selectOptionByLabel($label);
+        } catch (Selenium2TestCase_WebDriverException $exception) {
+            throw new InvalidArgumentException("The option labelled [{$label}] is not present on the drop down list.");
+        }
+
+        return $this;
     }
 
 //    /**

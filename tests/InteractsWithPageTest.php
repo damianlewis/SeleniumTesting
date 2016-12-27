@@ -473,7 +473,8 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_check_a_given_checkbox_using_an_name_attribute()
     {
         $this->visit('/form')
-            ->check('checkbox-2');
+            ->check('checkbox-2')
+            ->seeIsChecked('checkbox-2');
     }
 
     /** @test */
@@ -481,14 +482,17 @@ class InteractsWithPageTest extends \SeleniumTestCase
     {
         $this->visit('/form')
             ->check('#checkbox2')
-            ->check('checkbox3');
+            ->check('checkbox3')
+            ->seeIsChecked('#checkbox2')
+            ->seeIsChecked('checkbox3');
     }
 
     /** @test */
     public function it_can_uncheck_a_given_checkbox_using_an_name_attribute()
     {
         $this->visit('/form')
-            ->uncheck('checkbox-8');
+            ->uncheck('checkbox-8')
+            ->dontSeeIsChecked('checkbox-8');
     }
 
     /** @test */
@@ -496,7 +500,56 @@ class InteractsWithPageTest extends \SeleniumTestCase
     {
         $this->visit('/form')
             ->uncheck('#checkbox8')
-            ->uncheck('checkbox10');
+            ->uncheck('checkbox10')
+            ->dontSeeIsChecked('#checkbox8')
+            ->dontSeeIsChecked('checkbox10');
+    }
+
+    /** @test */
+    public function it_can_select_a_given_option_from_a_drop_down_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->select('Baltimore', 'select-1')
+            ->seeIsSelected('select-1', 'bal');
+    }
+
+    /** @test */
+    public function it_can_select_a_given_option_from_a_drop_down_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->select('Baltimore', '#select1')
+            ->select('Boston', 'select1')
+            ->seeIsSelected('select-1', 'bos');
+    }
+
+    /** @test */
+    public function it_can_select_multiple_options_from_a_multiselect_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->select('Baltimore', 'multi-select-1')
+            ->select('Calgary', 'multi-select-1')
+            ->dontSeeIsSelected('multi-select-1', 'ams')
+            ->seeIsSelected('multi-select-1', 'atl')
+            ->seeIsSelected('multi-select-1', 'bal')
+            ->dontSeeIsSelected('multi-select-1', 'bos')
+            ->dontSeeIsSelected('multi-select-1', 'bue')
+            ->seeIsSelected('multi-select-1', 'cal')
+            ->seeIsSelected('multi-select-1', 'chi');
+    }
+
+    /** @test */
+    public function it_can_select_multiple_options_from_a_multiselect_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->select('Baltimore', '#multiselect1')
+            ->select('Calgary', 'multiselect1')
+            ->dontSeeIsSelected('multi-select-1', 'ams')
+            ->seeIsSelected('multi-select-1', 'atl')
+            ->seeIsSelected('multi-select-1', 'bal')
+            ->dontSeeIsSelected('multi-select-1', 'bos')
+            ->dontSeeIsSelected('multi-select-1', 'bue')
+            ->seeIsSelected('multi-select-1', 'cal')
+            ->seeIsSelected('multi-select-1', 'chi');
     }
 //
 //    /** @test */

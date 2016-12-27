@@ -58,7 +58,7 @@ class IsSelected extends FormFieldConstraint
      */
     protected function getSelectedValueFromSelect(Crawler $select)
     {
-        return $select->selectedValues();
+        return $select->element()->selectedValues();
     }
 
     /**

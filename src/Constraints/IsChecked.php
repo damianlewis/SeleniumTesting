@@ -36,7 +36,7 @@ class IsChecked extends FormFieldConstraint
     {
         $crawler = $this->crawler($crawler);
 
-        return $this->field($crawler)->selected();
+        return $this->field($crawler)->element()->selected();
     }
 
     /**

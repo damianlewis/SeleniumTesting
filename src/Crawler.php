@@ -195,39 +195,6 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Returns the selected option values for the first element from the list.
-     * Will only return the option values if the first element in the elements list is a 'select' element.
-     *
-     * @return array
-     *
-     * @throws InvalidArgumentException
-     */
-    public function selectedValues()
-    {
-        if (empty($this->elements)) {
-            throw new InvalidArgumentException('The current element list is empty.');
-        }
-
-        return $this->getElement(0)->selectedValues();
-    }
-
-    /**
-     * Checks iff the first element from the list is selected/checked.
-     *
-     * @return bool
-     *
-     * @throws InvalidArgumentException
-     */
-    public function selected()
-    {
-        if (empty($this->elements)) {
-            throw new InvalidArgumentException('The current element list is empty.');
-        }
-
-        return $this->getElement(0)->selected();
-    }
-
-    /**
      * Filters the document by the given xpath, css selector, name, id or class attribute.
      *
      * @param mixed $selectors
@@ -686,7 +653,7 @@ class Crawler implements Countable, IteratorAggregate
     {
         try {
             $elements = $this->document->elements($this->document->using($criterion)->value($selector));
-        } catch (Selenium2TestCase_WebDriverException $e) {
+        } catch (Selenium2TestCase_WebDriverException $exception) {
             return [];
         }
 
