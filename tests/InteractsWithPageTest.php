@@ -273,10 +273,10 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_an_input_field_with_the_given_id_attribute_contains_the_given_text()
     {
         $this->visit('/form')
-            ->seeInField('#textInputWithValue1', 'Text input with value')
-            ->seeInField('textInputWithValue1', 'Text input with value')
-            ->seeInField('#textAreaWithValue1', 'Text area with value')
-            ->seeInField('textAreaWithValue1', 'Text area with value');
+            ->seeInField('#textinputwithvalue1', 'Text input with value')
+            ->seeInField('textinputwithvalue1', 'Text input with value')
+            ->seeInField('#textareawithvalue1', 'Text area with value')
+            ->seeInField('textareawithvalue1', 'Text area with value');
 
     }
 
@@ -291,8 +291,8 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_an_input_field_with_the_given_id_attribute_does_not_contain_the_given_text()
     {
         $this->visit('/form')
-            ->dontSeeInField('#textInputWithValue1', 'Nothing to see here')
-            ->dontSeeInField('textInputWithValue1', 'Nothing to see here');
+            ->dontSeeInField('#textinputwithvalue1', 'Nothing to see here')
+            ->dontSeeInField('textinputwithvalue1', 'Nothing to see here');
     }
 
     /** @test */
@@ -332,16 +332,16 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_radio_group_with_the_given_name_attribute_and_given_value_is_selected()
     {
         $this->visit('/form')
-            ->seeIsSelected('radio-group-1', 'square');
+            ->seeIsSelected('radio-group-3', 'square');
     }
 
     /** @test */
     public function it_can_assert_that_a_radio_group_with_the_given_name_attribute_and_given_value_is_not_selected()
     {
         $this->visit('/form')
-            ->dontSeeIsSelected('radio-group-1', 'circle')
-            ->dontSeeIsSelected('radio-group-1', 'triangle')
-            ->dontSeeIsSelected('radio-group-1', 'rectangle');
+            ->dontSeeIsSelected('radio-group-3', 'circle')
+            ->dontSeeIsSelected('radio-group-3', 'triangle')
+            ->dontSeeIsSelected('radio-group-3', 'rectangle');
     }
 
     /** @test */
@@ -357,10 +357,10 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_multi_select_field_with_the_given_id_attribute_and_given_value_are_selected()
     {
         $this->visit('/form')
-            ->seeIsSelected('#multiSelect1', 'atl')
-            ->seeIsSelected('multiSelect1', 'atl')
-            ->seeIsSelected('#multiSelect1', 'chi')
-            ->seeIsSelected('multiSelect1', 'chi');
+            ->seeIsSelected('#multiselect1', 'atl')
+            ->seeIsSelected('multiselect1', 'atl')
+            ->seeIsSelected('#multiselect1', 'chi')
+            ->seeIsSelected('multiselect1', 'chi');
     }
 
     /** @test */
@@ -379,51 +379,51 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_a_checkbox_with_the_given_name_attribute_is_checked()
     {
         $this->visit('/form')
-            ->seeIsChecked('checkbox-2');
+            ->seeIsChecked('checkbox-8');
     }
 
     /** @test */
     public function it_can_assert_that_a_checkbox_with_the_given_id_attribute_is_checked()
     {
         $this->visit('/form')
-            ->seeIsChecked('#checkbox2')
-            ->seeIsChecked('checkbox2');
+            ->seeIsChecked('#checkbox8')
+            ->seeIsChecked('checkbox8');
     }
 
     /** @test */
     public function it_can_assert_that_multiple_checkboxes_with_the_given_name_attributes_are_checked()
     {
         $this->visit('/form')
-            ->seeIsChecked('checkbox-2')
-            ->seeIsChecked('checkbox-4');
+            ->seeIsChecked('checkbox-8')
+            ->seeIsChecked('checkbox-10');
     }
 
     /** @test */
     public function it_can_assert_that_multiple_checkboxes_with_the_given_id_attributes_are_checked()
     {
         $this->visit('/form')
-            ->seeIsChecked('#checkbox2')
-            ->seeIsChecked('checkbox2')
-            ->seeIsChecked('#checkbox4')
-            ->seeIsChecked('checkbox4');
+            ->seeIsChecked('#checkbox8')
+            ->seeIsChecked('checkbox8')
+            ->seeIsChecked('#checkbox10')
+            ->seeIsChecked('checkbox10');
     }
 
     /** @test */
     public function it_can_assert_that_a_checkbox_with_the_given_name_attribute_is_not_checked()
     {
         $this->visit('/form')
-            ->dontSeeIsChecked('checkbox-1')
-            ->dontSeeIsChecked('checkbox-3');
+            ->dontSeeIsChecked('checkbox-7')
+            ->dontSeeIsChecked('checkbox-9');
     }
 
     /** @test */
     public function it_can_assert_that_a_checkbox_with_the_given_id_attribute_is_not_checked()
     {
         $this->visit('/form')
-            ->dontSeeIsChecked('#checkbox1')
-            ->dontSeeIsChecked('checkbox1')
-            ->dontSeeIsChecked('#checkbox3')
-            ->dontSeeIsChecked('checkbox3');
+            ->dontSeeIsChecked('#checkbox7')
+            ->dontSeeIsChecked('checkbox7')
+            ->dontSeeIsChecked('#checkbox9')
+            ->dontSeeIsChecked('checkbox9');
     }
 
     /** @test */
@@ -452,7 +452,7 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_type_text_into_an_input_using_an_id_attribute()
     {
         $this->visit('/form')
-            ->type('Some test text', '#textInput1');
+            ->type('Some test text', '#textinput1');
     }
 
     /** @test */
@@ -466,7 +466,37 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_type_text_into_an_textarea_using_an_id_attribute()
     {
         $this->visit('/form')
-            ->type('Some test text', '#textInput1');
+            ->type('Some test text', '#textarea1');
+    }
+
+    /** @test */
+    public function it_can_check_a_given_checkbox_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->check('checkbox-2');
+    }
+
+    /** @test */
+    public function it_can_check_a_given_checkbox_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->check('#checkbox2')
+            ->check('checkbox3');
+    }
+
+    /** @test */
+    public function it_can_uncheck_a_given_checkbox_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->uncheck('checkbox-8');
+    }
+
+    /** @test */
+    public function it_can_uncheck_a_given_checkbox_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->uncheck('#checkbox8')
+            ->uncheck('checkbox10');
     }
 //
 //    /** @test */

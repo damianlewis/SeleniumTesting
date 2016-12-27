@@ -391,6 +391,43 @@ trait InteractsWithPage
         return $this;
     }
 
+    /**
+     * Check a checkbox on the page.
+     *
+     * @param string $element
+     * @param bool   $negate
+     *
+     * @return $this
+     */
+    protected function check($element, $negate = false)
+    {
+        $checkbox = $this->filterByNameOrId($element, 'input[type="checkbox"]');
+
+        if (! count($checkbox)) {
+            throw new InvalidArgumentException("Could not find any checkbox elements with a name or ID attribute of [{$element}].");
+        }
+
+        if ($checkbox->selected() == $negate) {
+            $checkbox->element()->click();
+        } else {
+            throw new InvalidArgumentException(sprintf("Checkbox element [%s] is already %s.", $element, $negate ? 'unchecked' : 'checked'));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Uncheck a checkbox on the page.
+     *
+     * @param  string $element
+     *
+     * @return $this
+     */
+    protected function uncheck($element)
+    {
+        return $this->check($element, true);
+    }
+
 //    /**
 //     * Press a button with the given button text, name or ID attribute.
 //     *
