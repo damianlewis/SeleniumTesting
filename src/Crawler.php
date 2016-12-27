@@ -114,6 +114,21 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
+     * Returns the first element in the list.
+     *
+     * @return Selenium2TestCase_Element
+     *
+     */
+    public function element()
+    {
+        if (empty($this->elements)) {
+            throw new InvalidArgumentException('The current element list is empty.');
+        }
+
+        return $this->getElement(0);
+    }
+
+    /**
      * Returns the attribute value of the first element of the list.
      *
      * @param string $attribute
@@ -377,7 +392,7 @@ class Crawler implements Countable, IteratorAggregate
 //    }
 
     /**
-     * Selects links by the given link text.
+     * Selects link elements by the given link text.
      *
      * @param string $name
      *
@@ -386,12 +401,6 @@ class Crawler implements Countable, IteratorAggregate
     public function selectLink($name)
     {
         $links = $this->createSubCrawler($this->document, null);
-
-//        $elements = $this->filterByLinkText($name);
-
-//        if (empty($elements)) {
-//            $elements = $this->selectElementsByAttribute($name, ['id'], ['a']);
-//        }
 
         $links->add($this->filterByCriteria($name, 'link text'));
 

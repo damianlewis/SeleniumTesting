@@ -424,27 +424,21 @@ class InteractsWithPageTest extends \SeleniumTestCase
             ->dontSeeIsChecked('checkbox3');
     }
 
-//    /** @test */
-//    public function it_can_click_a_given_link_using_the_link_text()
-//    {
-//        $this->visit('/form')
-//            ->click('Register');
-//    }
-//
-//    /** @test */
-//    public function it_can_click_a_given_link_using_an_id_css_selector()
-//    {
-//        $this->visit('/login')
-//            ->click('#registerLinkId');
-//    }
-//
-//    /** @test */
-//    public function it_can_click_a_given_link_using_an_id_attribute()
-//    {
-//        $this->visit('/login')
-//            ->click('registerLinkId');
-//    }
-//
+    /** @test */
+    public function it_can_click_a_given_link_using_the_link_text()
+    {
+        $this->visit('/form')
+            ->click('Register');
+    }
+
+    /** @test */
+    public function it_can_click_a_given_link_using_an_id_attribute()
+    {
+        $this->visit('/login')
+            ->click('#registerLinkId')
+            ->click('registerLinkId');
+    }
+
 //    /** @test */
 //    public function it_can_type_text_into_an_input_using_an_id_css_selector()
 //    {

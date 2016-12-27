@@ -15,6 +15,7 @@ use SeleniumTesting\Crawler;
 use SeleniumTesting\Constraints\HasElement;
 use SeleniumTesting\Constraints\PageConstraint;
 use PHPUnit_Framework_ExpectationFailedException as PHPUnitException;
+use SeleniumTesting\InvalidArgumentException;
 
 trait InteractsWithPage
 {
@@ -343,36 +344,31 @@ trait InteractsWithPage
         return $this->assertInPage(new IsChecked($selector), true);
     }
 
-//    /**
-//     * Click a link with the given link text or id attribute.
-//     *
-//     * @param string $name
-//     *
-//     * @return $this
-//     */
-//    public function click($name)
-//    {
-////        $link = $this->crawler()->link($name);
-//        $link = $this->crawler()->selectLink($name);
-//
-//        if (! count($link)) {
-//            $link = $this->filterByNameOrId($name, 'a');
-//
-//            if (! count($link)) {
-//                throw new InvalidArgumentException(
-//                    "Could not find a link with a body, name, or ID attribute of [{$name}]."
-//                );
-//            }
-//        }
-//
-//        if (! $link) {
-//            throw new InvalidArgumentException("Could not find a link with the text or id attribute of [{$name}].");
-//        }
-//
-//        $link->click();
-//
-//        return $this;
-//    }
+    /**
+     * Click a link with the given link text or id attribute.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function click($name)
+    {
+        $link = $this->crawler()->selectLink($name);
+
+        if (! count($link)) {
+            $link = $this->filterByNameOrId($name, 'a');
+
+            if (! count($link)) {
+                throw new InvalidArgumentException(
+                    "Could not find a link with the text, name, or ID attribute of [{$name}]."
+                );
+            }
+        }
+
+        $link->element()->click();
+
+        return $this;
+    }
 
 //    /**
 //     * Fill a text field with the given text.
@@ -466,6 +462,27 @@ trait InteractsWithPage
 //
 //        return $this->crawler()->filter($selectors);
 //    }
+
+    /**
+     * Filter elements according to the given name or ID attribute.
+     *
+     * @param string       $name
+     * @param array|string $elements
+     *
+     * @return Crawler
+     */
+    protected function filterByNameOrId($name, $elements = '*')
+    {
+        $name = ltrim($name, '#');
+
+        $elements = is_array($elements) ? $elements : [$elements];
+
+        $elements = collect($elements)->map(function ($element) use ($name) {
+            return "{$element}#{$name}, {$element}[@name='{$name}']";
+        })->all();
+
+        return $this->crawler()->filter(implode(', ', $elements));
+    }
 
     /**
      * Return the full url for the given uri.
