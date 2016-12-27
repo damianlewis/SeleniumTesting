@@ -295,6 +295,84 @@ class InteractsWithPageTest extends \SeleniumTestCase
             ->dontSeeInField('textInputWithValue', 'Nothing to see here');
     }
 
+    /** @test */
+    public function it_can_assert_that_a_select_field_with_the_given_name_attribute_and_given_value_is_selected()
+    {
+        $this->visit('/form')
+            ->seeIsSelected('select-1', 'bos');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_select_field_with_the_given_id_attribute_and_given_value_is_selected()
+    {
+        $this->visit('/form')
+            ->seeIsSelected('#select1', 'bos')
+            ->seeIsSelected('select1', 'bos');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_select_field_with_the_given_name_attribute_and_given_value_is_not_selected()
+    {
+        $this->visit('/form')
+            ->dontSeeIsSelected('select-1', 'ams')
+            ->dontSeeIsSelected('select-1', 'atl')
+            ->dontSeeIsSelected('select-1', 'bal')
+            ->dontSeeIsSelected('select-1', 'bue');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_select_field_with_the_given_id_attribute_and_given_value_is_not_selected()
+    {
+        $this->visit('/form')
+            ->dontSeeIsSelected('#select1', 'bal')
+            ->dontSeeIsSelected('select1', 'bal');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_radio_group_with_the_given_name_attribute_and_given_value_is_selected()
+    {
+        $this->visit('/form')
+            ->seeIsSelected('radio-group-1', 'square');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_radio_group_with_the_given_name_attribute_and_given_value_is_not_selected()
+    {
+        $this->visit('/form')
+            ->dontSeeIsSelected('radio-group-1', 'circle')
+            ->dontSeeIsSelected('radio-group-1', 'triangle')
+            ->dontSeeIsSelected('radio-group-1', 'rectangle');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_multi_select_field_with_the_given_name_attribute_and_given_values_are_selected()
+    {
+        $this->visit('/form')
+            ->seeIsSelected('multi-select-1', 'atl')
+            ->seeIsSelected('multi-select-1', 'chi');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_multi_select_field_with_the_given_id_attribute_and_given_value_are_selected()
+    {
+        $this->visit('/form')
+            ->seeIsSelected('#multiSelect1', 'atl')
+            ->seeIsSelected('multiSelect1', 'atl')
+            ->seeIsSelected('#multiSelect1', 'chi')
+            ->seeIsSelected('multiSelect1', 'chi');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_multi_select_field_with_the_given_name_attribute_and_given_value_are_not_selected()
+    {
+        $this->visit('/form')
+            ->dontSeeIsSelected('multi-select-1', 'ams')
+            ->dontSeeIsSelected('multi-select-1', 'bal')
+            ->dontSeeIsSelected('multi-select-1', 'bos')
+            ->dontSeeIsSelected('multi-select-1', 'bue')
+            ->dontSeeIsSelected('multi-select-1', 'cal');
+    }
+
 //    /** @test */
 //    public function it_can_click_a_given_link_using_the_link_text()
 //    {

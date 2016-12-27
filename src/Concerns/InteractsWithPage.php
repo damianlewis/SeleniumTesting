@@ -7,6 +7,7 @@ use SeleniumTesting\Constraints\HasLink;
 use SeleniumTesting\Constraints\HasSource;
 use SeleniumTesting\Constraints\HasText;
 use SeleniumTesting\Constraints\HasValue;
+use SeleniumTesting\Constraints\IsSelected;
 use SeleniumTesting\HttpException;
 use SeleniumTesting\Constraints\ReversePageConstraint;
 use SeleniumTesting\Crawler;
@@ -287,6 +288,33 @@ trait InteractsWithPage
     public function dontSeeInField($selector, $value)
     {
         return $this->assertInPage(new HasValue($selector, $value), true);
+    }
+
+    /**
+     * Assert that the expected value is selected.
+     *
+     * @param  string $selector
+     * @param  string $value
+     * @param  bool   $negate
+     *
+     * @return $this
+     */
+    public function seeIsSelected($selector, $value, $negate = false)
+    {
+        return $this->assertInPage(new IsSelected($selector, $value), $negate);
+    }
+
+    /**
+     * Assert that the given value is not selected.
+     *
+     * @param  string $selector
+     * @param  string $value
+     *
+     * @return $this
+     */
+    public function dontSeeIsSelected($selector, $value)
+    {
+        return $this->assertInPage(new IsSelected($selector, $value), true);
     }
 
 //    /**

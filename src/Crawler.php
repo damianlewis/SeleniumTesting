@@ -180,7 +180,23 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Filters the document by the given css selector, id, name, class attribute or tag.
+     * Returns the text from the child nodes of the first element from the list.
+     *
+     * @return string
+     *
+     * @throws InvalidArgumentException
+     */
+    public function selectedValues()
+    {
+        if (empty($this->elements)) {
+            throw new InvalidArgumentException('The current element list is empty.');
+        }
+
+        return $this->getElement(0)->selectedValues();
+    }
+
+    /**
+     * Filters the document by the given xpath, css selector, name, id or class attribute.
      *
      * @param mixed $selectors
      *
@@ -188,6 +204,15 @@ class Crawler implements Countable, IteratorAggregate
      */
     public function filter($selectors)
     {
+        $elements = [];
+        $criteria = [
+            'xpath',
+            'css selector',
+            'name',
+            'id',
+            'class name'
+        ];
+
         $crawler = $this->createSubCrawler($this->document, null);
 
         $selectors = explode(',', $selectors);
@@ -195,33 +220,48 @@ class Crawler implements Countable, IteratorAggregate
         foreach ($selectors as $selector) {
             $selector = trim($selector);
 
-            try {
-                if (starts_with($selector, '//')) {
-                    $elements = $this->filterByXPath($selector);
-                } else {
-                    $elements = $this->filterByCss($selector);
-
+            if (empty($elements) && starts_with($selector, ['select', '//select'])) {
+                if (! is_null($element = $this->findSelect($selector))) {
+                    $elements[] = $element;
+                }
+            } else {
+                foreach ($criteria as $criterion) {
                     if (empty($elements)) {
-                        $elements = $this->filterByName($selector);
-                    }
-
-                    if (empty($elements)) {
-                        $elements = $this->filterById($selector);
-                    }
-
-                    if (empty($elements)) {
-                        $elements = $this->filterByClass($selector);
+                        $elements = $this->filterByCriteria($selector, $criterion);
                     }
                 }
-
-                $crawler->add($elements);
-
-            } catch (Selenium2TestCase_WebDriverException $e) {
-                throw new InvalidArgumentException($e->getMessage());
             }
         }
 
+        $crawler->add($elements);
+
         return $crawler;
+    }
+
+    /**
+     * Find a select element by the given xpath, css selector, name or id attribute.
+     *
+     * @param mixed $selector
+     *
+     * @return Crawler
+     */
+    protected function findSelect($selector)
+    {
+        $element = null;
+        $criteria = [
+            'byXPath',
+            'byCssSelector',
+            'byName',
+            'byId'
+        ];
+
+        foreach ($criteria as $criterion) {
+            if (is_null($element)) {
+                $element = $this->findSelectByCriteria($selector, $criterion);
+            }
+        }
+
+        return $element;
     }
 
 //    /**
@@ -336,7 +376,7 @@ class Crawler implements Countable, IteratorAggregate
 //            $elements = $this->selectElementsByAttribute($name, ['id'], ['a']);
 //        }
 
-        $links->add($this->filterByLinkText($name));
+        $links->add($this->filterByCriteria($name, 'link text'));
 
         return $links;
     }
@@ -554,100 +594,237 @@ class Crawler implements Countable, IteratorAggregate
         return $this->createSubCrawler($elements);
     }
 
+//    /**
+//     * Filters the document  by the given xpath, css selector, id, name or class attribute.
+//     *
+//     * @param array $selectors
+//     *
+//     * @return array
+//     */
+//    protected function filterElements(array $selectors)
+//    {
+//        $elements = [];
+//        $criteria = [
+//            'xpath',
+//            'css selector',
+//            'name',
+//            'id',
+//            'class name'
+//        ];
+//
+//        foreach ($selectors as $selector) {
+//            $selector = trim($selector);
+//
+////                if (starts_with($selector, '//')) {
+////                    $elements = $this->filterByCriteria($selector, 'xpath');
+////                } else {
+//            foreach ($criteria as $criterion) {
+//                if (empty($elements)) {
+////                    try {
+//                    $elements = $this->filterByCriteria($selector, $criterion);
+////                    } catch (Selenium2TestCase_WebDriverException $e) {
+////                        throw new InvalidArgumentException($e->getMessage());
+////                        continue;
+////                    }
+//                }
+////                    $elements = $this->filterByCriteria($selector, 'css selector');
+////
+////                    if (empty($elements)) {
+////                        $elements = $this->filterByCriteria($selector, 'name');
+////                    }
+////
+////                    if (empty($elements)) {
+////                        $elements = $this->filterByCriteria($selector, 'id');
+////                    }
+////
+////                    if (empty($elements)) {
+////                        $elements = $this->filterByCriteria($selector, 'class name');
+////                    }
+////                }
+//            }
+//        }
+//
+//        return $elements;
+//    }
+
     /**
-     * Filter the elements using an xPath descriptor.
+     * Filter the elements by the given selector using the given criteria.
      *
      * @param string $selector
+     * @param string $criterion
      *
      * @return array
+     *
      */
-    protected function filterByXPath($selector)
+    protected function filterByCriteria($selector, $criterion)
     {
-        $elements = $this->document->elements($this->document->using('xpath')->value($selector));
-
-        return $elements;
-    }
-
-    /**
-     * Filter the elements by css selector.
-     *
-     * @param string $selector
-     *
-     * @return array
-     */
-    protected function filterByCss($selector)
-    {
-        $elements = $this->document->elements($this->document->using('css selector')->value($selector));
-
-        return $elements;
-    }
-
-    /**
-     * Filter the elements by name attribute.
-     *
-     * @param string $selector
-     *
-     * @return array
-     */
-    protected function filterByName($selector)
-    {
-        $elements = $this->document->elements($this->document->using('name')->value($selector));
-
-        return $elements;
-    }
-
-    /**
-     * Filter the elements by id attribute.
-     *
-     * @param string $selector
-     *
-     * @return array
-     */
-    protected function filterById($selector)
-    {
-        if (starts_with($selector, '.')) {
+        try {
+            $elements = $this->document->elements($this->document->using($criterion)->value($selector));
+        } catch (Selenium2TestCase_WebDriverException $e) {
             return [];
         }
 
-        $elements = $this->document->elements($this->document->using('id')->value($selector));
-
         return $elements;
     }
 
     /**
-     * Filter the elements by class attribute.
+     * //     * @param array $selectors
+     * //     *
+     * //     * @return array
+     * //     */
+//    protected function findSelect(array $selectors)
+//    {
+//        $element = null;
+//        $criteria = [
+//            'byXPath',
+//            'byCssSelector',
+//            'byName',
+//            'byId'
+//        ];
+//
+//        foreach ($selectors as $selector) {
+//            $selector = trim($selector);
+//
+////            if (starts_with($selector, '//')) {
+////                $element = $this->findSelectByCriteria($selector, 'byXPath');
+////            } else {
+//            foreach ($criteria as $criterion) {
+//                if (is_null($element)) {
+////                        try {
+//                    $element = $this->findSelectByCriteria($selector, $criterion);
+////                        } catch (Selenium2TestCase_WebDriverException $e) {
+////                            continue;
+////                        }
+//                }
+//            }
+////                $element = $this->findSelectByCriteria($selector, 'byCssSelector');
+////
+////                if (is_null($element)) {
+////                    $element = $this->findSelectByCriteria($selector, 'byName');
+////                }
+////
+////                if (is_null($element)) {
+////                    $element = $this->findSelectByCriteria($selector, 'byId');
+////                }
+////            }
+//        }
+//
+//        return $element;
+//    }
+
+    /**
+     * Find the select element by the given selector using the given criteria.
      *
      * @param string $selector
+     * @param string $criterion
      *
-     * @return array
+     * @return null|Selenium2TestCase_Element
      */
-    protected function filterByClass($selector)
-    {
-        // Using 'class name' with a selector that starts with '#' causes an error to be thrown.
-        // Return an empty array, as the '#' is explicitly stating to filter the document by id attribute
-        // and this is the filter for class attributes.
-        if (starts_with($selector, '#')) {
-            return [];
+    protected
+    function findSelectByCriteria(
+        $selector,
+        $criterion
+    ) {
+        try {
+//            return $this->document->select($this->document->byXPath($selector));
+            return $this->document->select(call_user_func_array([$this->document, $criterion], [$selector]));
+        } catch (Selenium2TestCase_WebDriverException $exception) {
+            return null;
         }
-
-        $elements = $this->document->elements($this->document->using('class name')->value($selector));
-
-        return $elements;
     }
 
-    /**
-     * Filter the elements by link text.
-     *
-     * @param string $text
-     *
-     * @return array
-     */
-    protected function filterByLinkText($text)
-    {
-        $elements = $this->document->elements($this->document->using('link text')->value($text));
+//    /**
+//     * Filter the elements by css selector.
+//     *
+//     * @param string $selector
+//     *
+//     * @return array
+//     */
+//    protected function filterByCss($selector)
+//    {
+//        try {
+//            $elements = $this->isSelect
+//                ? $this->document->select($this->document->byCssSelector($selector))
+//                : $this->document->elements($this->document->using('css selector')->value($selector));
+//        } catch (Selenium2TestCase_WebDriverException $exception) {
+//            return [];
+//        }
+//
+//        return $elements;
+//    }
 
-        return $elements;
-    }
+//    /**
+//     * Filter the elements by name attribute.
+//     *
+//     * @param string $selector
+//     *
+//     * @return array
+//     */
+//    protected function filterByName($selector)
+//    {
+//        try {
+//            $elements = $this->isSelect
+//                ? $this->document->select($this->document->byName($selector))
+//                : $this->document->elements($this->document->using('name')->value($selector));
+//        } catch (Selenium2TestCase_WebDriverException $exception) {
+//            return [];
+//        }
+//
+//        return $elements;
+//    }
+
+//    /**
+//     * Filter the elements by id attribute.
+//     *
+//     * @param string $selector
+//     *
+//     * @return array
+//     */
+//    protected function filterById($selector)
+//    {
+//        if (starts_with($selector, '.')) {
+//            return [];
+//        }
+//
+//        $elements = $this->document->elements($this->document->using('id')->value($selector));
+//
+//        return $elements;
+//    }
+
+//    /**
+//     * Filter the elements by class attribute.
+//     *
+//     * @param string $selector
+//     *
+//     * @return array
+//     */
+//    protected function filterByClass($selector)
+//    {
+//        // Using 'class name' with a selector that starts with '#' causes an error to be thrown.
+//        // Return an empty array, as the '#' is explicitly stating to filter the document by id attribute
+//        // and this is the filter for class attributes.
+//        if (starts_with($selector, '#')) {
+//            return [];
+//        }
+//
+//        $elements = $this->document->elements($this->document->using('class name')->value($selector));
+//
+//        return $elements;
+//    }
+
+//    /**
+//     * Filter the elements by link text.
+//     *
+//     * @param string $text
+//     *
+//     * @return array
+//     */
+//    protected function filterByLinkText($text)
+//    {
+//        $elements = $this->document->elements($this->document->using('link text')->value($text));
+//
+//        return $elements;
+//    }
 
 //    /**
 //     * Strip out any leading css selector characters.

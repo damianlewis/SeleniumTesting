@@ -44,7 +44,9 @@ class HasValue extends FormFieldConstraint
     {
         $field = $this->field($crawler);
 
-        return $field->elementName() == 'input' ? $field->attribute('value') : $field->text();
+        return $field->elementName() == 'input'
+            ? $field->attribute('value')
+            : $field->text();
     }
 
     /**
