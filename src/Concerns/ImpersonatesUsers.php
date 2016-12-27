@@ -15,7 +15,7 @@ trait ImpersonatesUsers
      *
      * @return $this
      */
-    protected function actingAs(User $user, string $password = 'password')
+    protected function actingAs(User $user, $password = 'password')
     {
         $this->visit('login')
             ->type($user->email, 'email')
