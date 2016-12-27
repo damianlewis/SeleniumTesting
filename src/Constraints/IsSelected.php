@@ -14,7 +14,7 @@ class IsSelected extends FormFieldConstraint
      */
     protected function validElements()
     {
-        return 'select,input[@type="radio"]';
+        return "select,input[type='radio']";
     }
 
     /**

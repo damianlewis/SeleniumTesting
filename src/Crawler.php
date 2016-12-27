@@ -180,9 +180,10 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Returns the text from the child nodes of the first element from the list.
+     * Returns the selected option values for the first element from the list.
+     * Will only return the option values if the first element in the elements list is a 'select' element.
      *
-     * @return string
+     * @return array
      *
      * @throws InvalidArgumentException
      */
@@ -193,6 +194,22 @@ class Crawler implements Countable, IteratorAggregate
         }
 
         return $this->getElement(0)->selectedValues();
+    }
+
+    /**
+     * Checks iff the first element from the list is selected/checked.
+     *
+     * @return bool
+     *
+     * @throws InvalidArgumentException
+     */
+    public function selected()
+    {
+        if (empty($this->elements)) {
+            throw new InvalidArgumentException('The current element list is empty.');
+        }
+
+        return $this->getElement(0)->selected();
     }
 
     /**

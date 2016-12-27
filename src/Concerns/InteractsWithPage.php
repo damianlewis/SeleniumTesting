@@ -7,6 +7,7 @@ use SeleniumTesting\Constraints\HasLink;
 use SeleniumTesting\Constraints\HasSource;
 use SeleniumTesting\Constraints\HasText;
 use SeleniumTesting\Constraints\HasValue;
+use SeleniumTesting\Constraints\IsChecked;
 use SeleniumTesting\Constraints\IsSelected;
 use SeleniumTesting\HttpException;
 use SeleniumTesting\Constraints\ReversePageConstraint;
@@ -315,6 +316,31 @@ trait InteractsWithPage
     public function dontSeeIsSelected($selector, $value)
     {
         return $this->assertInPage(new IsSelected($selector, $value), true);
+    }
+
+    /**
+     * Assert that the given checkbox is selected.
+     *
+     * @param  string $selector
+     * @param  bool   $negate
+     *
+     * @return $this
+     */
+    public function seeIsChecked($selector, $negate = false)
+    {
+        return $this->assertInPage(new IsChecked($selector), $negate);
+    }
+
+    /**
+     * Assert that the given checkbox is not selected.
+     *
+     * @param  string $selector
+     *
+     * @return $this
+     */
+    public function dontSeeIsChecked($selector)
+    {
+        return $this->assertInPage(new IsChecked($selector), true);
     }
 
 //    /**

@@ -373,6 +373,57 @@ class InteractsWithPageTest extends \SeleniumTestCase
             ->dontSeeIsSelected('multi-select-1', 'cal');
     }
 
+    /** @test */
+    public function it_can_assert_that_a_checkbox_with_the_given_name_attribute_is_checked()
+    {
+        $this->visit('/form')
+            ->seeIsChecked('checkbox-2');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_checkbox_with_the_given_id_attribute_is_checked()
+    {
+        $this->visit('/form')
+            ->seeIsChecked('#checkbox2')
+            ->seeIsChecked('checkbox2');
+    }
+
+    /** @test */
+    public function it_can_assert_that_multiple_checkboxes_with_the_given_name_attributes_are_checked()
+    {
+        $this->visit('/form')
+            ->seeIsChecked('checkbox-2')
+            ->seeIsChecked('checkbox-4');
+    }
+
+    /** @test */
+    public function it_can_assert_that_multiple_checkboxes_with_the_given_id_attributes_are_checked()
+    {
+        $this->visit('/form')
+            ->seeIsChecked('#checkbox2')
+            ->seeIsChecked('checkbox2')
+            ->seeIsChecked('#checkbox4')
+            ->seeIsChecked('checkbox4');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_checkbox_with_the_given_name_attribute_is_not_checked()
+    {
+        $this->visit('/form')
+            ->dontSeeIsChecked('checkbox-1')
+            ->dontSeeIsChecked('checkbox-3');
+    }
+
+    /** @test */
+    public function it_can_assert_that_a_checkbox_with_the_given_id_attribute_is_not_checked()
+    {
+        $this->visit('/form')
+            ->dontSeeIsChecked('#checkbox1')
+            ->dontSeeIsChecked('checkbox1')
+            ->dontSeeIsChecked('#checkbox3')
+            ->dontSeeIsChecked('checkbox3');
+    }
+
 //    /** @test */
 //    public function it_can_click_a_given_link_using_the_link_text()
 //    {

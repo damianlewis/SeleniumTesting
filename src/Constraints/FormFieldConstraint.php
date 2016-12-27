@@ -76,7 +76,19 @@ abstract class FormFieldConstraint extends PageConstraint
         $name = ltrim($this->selector, '#');
 
         return collect(explode(',', $this->validElements()))->map(function ($element) use ($name) {
-            return "{$element}#{$name}, //{$element}[@name='{$name}']";
+            $selector = "{$element}#{$name}";
+
+            preg_match('/\[.*\]/', $element, $options);
+
+            if (! empty($options)) {
+                $tag = preg_split('/\[.*\]/', $element)[0];
+                $options = trim($options[0], '[,]');
+                $selector .= ", //{$tag}[@{$options}][@name='{$name}']";
+            } else {
+                $selector .= ", //{$element}[@name='{$name}']";
+            }
+
+            return $selector;
         })->all();
     }
 }
