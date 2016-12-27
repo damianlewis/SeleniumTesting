@@ -374,6 +374,38 @@ class Crawler implements Countable, IteratorAggregate
         return $links;
     }
 
+    /**
+     * Selects button elements by the given button text.
+     *
+     * @param string $name
+     *
+     * @return Crawler
+     */
+    public function selectButton($name)
+    {
+        $buttons = $this->createSubCrawler($this->document, null);
+
+        $buttons->add($this->filterByCriteria("//button[text()[contains(.,'{$name}')]]", 'xpath'));
+
+        return $buttons;
+    }
+
+    /**
+     * Selects elements by the given element text.
+     *
+     * @param string $name
+     *
+     * @return Crawler
+     */
+    public function selectElement($name)
+    {
+        $elements = $this->createSubCrawler($this->document, null);
+
+        $elements->add($this->filterByCriteria("//*[text()[contains(.,'{$name}')]]", 'xpath'));
+
+        return $elements;
+    }
+
 //    /**
 //     * Select any html buttons by the given button text, name or id attribute.
 //     *

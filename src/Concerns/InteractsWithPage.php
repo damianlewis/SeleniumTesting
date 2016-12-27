@@ -453,45 +453,57 @@ trait InteractsWithPage
         return $this;
     }
 
-//    /**
-//     * Press a button with the given button text, name or ID attribute.
-//     *
-//     * @param string $name
-//     *
-//     * @return $this
-//     */
-//    public function press($name)
-//    {
-//        $button = $this->crawler()->selectButton($name);
-//
-//        if (! $button) {
-//            throw new InvalidArgumentException("Could not find a button with the text, name or ID attribute of [{$name}].");
-//        }
-//
-//        $button->click();
-//
-//        return $this;
-//    }
+    /**
+     * Press a button with the given button text, name or ID attribute.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function press($name)
+    {
+        $button = $this->crawler()->selectButton($name);
 
-//    /**
-//     * Click an element with the given text value or ID attribute.
-//     *
-//     * @param string $name
-//     *
-//     * @return $this
-//     */
-//    public function clickOnElement($name)
-//    {
-//        $element = $this->crawler()->selectElementToClick($name);
-//
-//        if (! $element) {
-//            throw new InvalidArgumentException("Could not find an element with the text or ID attribute of [{$name}].");
-//        }
-//
-//        $element->click();
-//
-//        return $this;
-//    }
+        if (! count($button)) {
+            $button = $this->filterByNameOrId($name, 'button');
+
+            if (! count($button)) {
+                throw new InvalidArgumentException(
+                    "Could not find a button with the text, name, or ID attribute of [{$name}]."
+                );
+            }
+        }
+
+        $button->element()->click();
+
+        return $this;
+    }
+
+    /**
+     * Click an element with the given text value or ID attribute.
+     *
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function clickOnElement($name)
+    {
+        $element = $this->crawler()->selectElement($name);
+
+        if (! count($element)) {
+            $element = $this->filterByNameOrId($name);
+
+            if (! count($element)) {
+                throw new InvalidArgumentException(
+                    "Could not find an element with the text, name, or ID attribute of [{$name}]."
+                );
+            }
+        }
+
+        $element->element()->click();
+
+        return $this;
+    }
 
 //    /**
 //     * Filter elements according to the given attributes.

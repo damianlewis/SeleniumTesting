@@ -551,53 +551,48 @@ class InteractsWithPageTest extends \SeleniumTestCase
             ->seeIsSelected('multi-select-1', 'cal')
             ->seeIsSelected('multi-select-1', 'chi');
     }
-//
-//    /** @test */
-//    public function it_can_press_a_given_button_using_the_button_text()
-//    {
-//        $this->visit('/login')
-//            ->press('Login');
-//    }
-//
-//    /** @test */
-//    public function it_can_press_a_given_button_using_an_id_css_selector()
-//    {
-//        $this->visit('/login')
-//            ->press('#submitButton');
-//    }
-//
-//    /** @test */
-//    public function it_can_press_a_given_button_using_an_name_attribute()
-//    {
-//        $this->visit('/login')
-//            ->press('submit');
-//    }
-//
-//    /** @test */
-//    public function it_can_press_a_given_button_using_an_id_attribute()
-//    {
-//        $this->visit('/login')
-//            ->press('submitButton');
-//    }
-//
-//    /** @test */
-//    public function it_can_click_a_given_element_using_the_element_text()
-//    {
-//        $this->visit('/login')
-//            ->clickOnElement('Test Text Input');
-//    }
-//
-//    /** @test */
-//    public function it_can_click_a_given_element_using_an_id_css_selector()
-//    {
-//        $this->visit('/login')
-//            ->clickOnElement('#testTextInputLabel');
-//    }
-//
-//    /** @test */
-//    public function it_can_click_a_given_element_using_an_id_attribute()
-//    {
-//        $this->visit('/login')
-//            ->clickOnElement('testTextInputLabel');
-//    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_the_button_text()
+    {
+        $this->visit('/form')
+            ->press('Submit');
+    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->press('submit-button-1');
+    }
+
+    /** @test */
+    public function it_can_press_a_given_button_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->press('#submitbutton1')
+            ->press('submitbutton1');
+    }
+
+    /** @test */
+    public function it_can_click_a_given_element_using_the_element_text()
+    {
+        $this->visit('/form')
+            ->clickOnElement('Checkbox 1');
+    }
+
+    /** @test */
+    public function it_can_click_a_given_element_using_a_name_attribute()
+    {
+        $this->visit('/form')
+            ->clickOnElement('checkbox-1-label');
+    }
+
+    /** @test */
+    public function it_can_click_a_given_element_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->clickOnElement('#checkbox1label')
+            ->clickOnElement('checkbox1label');
+    }
 }
