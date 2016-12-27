@@ -486,17 +486,45 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_type_text_into_an_textarea_using_an_name_attribute()
+    public function it_can_type_text_into_a_textarea_using_an_name_attribute()
     {
         $this->visit('/form')
             ->type('Some test text', 'textarea-1');
     }
 
     /** @test */
-    public function it_can_type_text_into_an_textarea_using_an_id_attribute()
+    public function it_can_type_text_into_a_textarea_using_an_id_attribute()
     {
         $this->visit('/form')
             ->type('Some test text', '#textarea1');
+    }
+
+    /** @test */
+    public function it_can_clear_text_from_an_input_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->clear('text-input-with-value-1');
+    }
+
+    /** @test */
+    public function it_can_clear_text_from_an_input_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->clear('#textinputwithvalue1');
+    }
+
+    /** @test */
+    public function it_can_clear_text_from_a_textarea_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->clear('text-area-with-value-1');
+    }
+
+    /** @test */
+    public function it_can_clear_text_from_a_textarea_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->clear('#textareawithvalue1');
     }
 
     /** @test */

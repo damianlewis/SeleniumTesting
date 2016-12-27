@@ -419,6 +419,26 @@ trait InteractsWithPage
     }
 
     /**
+     * Clear a text field.
+     *
+     * @param string $element
+     *
+     * @return $this
+     */
+    public function clear($element)
+    {
+        $textField = $this->filterByNameOrId($element, 'input,textarea');
+
+        if (! count($textField)) {
+            throw new InvalidArgumentException("Could not find any text field elements with a name or ID attribute of [{$element}].");
+        }
+
+        $textField->element()->clear();
+
+        return $this;
+    }
+
+    /**
      * Check a checkbox on the page.
      *
      * @param string $element

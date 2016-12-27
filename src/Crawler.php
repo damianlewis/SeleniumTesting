@@ -83,16 +83,16 @@ class Crawler implements Countable, IteratorAggregate
     /**
      * Check if the given element exists in the elements array.
      *
-     * @param Selenium2TestCase_Element $element
+     * @param Selenium2TestCase_Element $needle
      *
      * @return bool
      */
-    public function hasElement(Selenium2TestCase_Element $element)
+    public function hasElement(Selenium2TestCase_Element $needle)
     {
-        $elementId = $element->getId();
+//        $elementId = $element->getId();
 
-        $elements = array_filter($this->elements, function ($element) use ($elementId) {
-            return $element->getId() == $elementId;
+        $elements = array_filter($this->elements, function ($element) use ($needle) {
+            return $element->equals($needle);
         });
 
         return count($elements) > 0;
