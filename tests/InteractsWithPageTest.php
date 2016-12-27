@@ -265,18 +265,18 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_an_input_field_with_the_given_name_attribute_contains_the_given_text()
     {
         $this->visit('/form')
-            ->seeInField('text-input-with-value', 'Text input with value')
-            ->seeInField('text-area-with-value', 'Text area with value');
+            ->seeInField('text-input-with-value-1', 'Text input with value')
+            ->seeInField('text-area-with-value-1', 'Text area with value');
     }
 
     /** @test */
     public function it_can_assert_that_an_input_field_with_the_given_id_attribute_contains_the_given_text()
     {
         $this->visit('/form')
-            ->seeInField('#textInputWithValue', 'Text input with value')
-            ->seeInField('textInputWithValue', 'Text input with value')
-            ->seeInField('#textAreaWithValue', 'Text area with value')
-            ->seeInField('textAreaWithValue', 'Text area with value');
+            ->seeInField('#textInputWithValue1', 'Text input with value')
+            ->seeInField('textInputWithValue1', 'Text input with value')
+            ->seeInField('#textAreaWithValue1', 'Text area with value')
+            ->seeInField('textAreaWithValue1', 'Text area with value');
 
     }
 
@@ -284,15 +284,15 @@ class InteractsWithPageTest extends \SeleniumTestCase
     public function it_can_assert_that_an_input_field_with_the_given_name_attribute_does_not_contain_the_given_text()
     {
         $this->visit('/form')
-            ->dontSeeInField('text-input-with-value', 'Nothing to see here');
+            ->dontSeeInField('text-input-with-value-1', 'Nothing to see here');
     }
 
     /** @test */
     public function it_can_assert_that_an_input_field_with_the_given_id_attribute_does_not_contain_the_given_text()
     {
         $this->visit('/form')
-            ->dontSeeInField('#textInputWithValue', 'Nothing to see here')
-            ->dontSeeInField('textInputWithValue', 'Nothing to see here');
+            ->dontSeeInField('#textInputWithValue1', 'Nothing to see here')
+            ->dontSeeInField('textInputWithValue1', 'Nothing to see here');
     }
 
     /** @test */
@@ -345,7 +345,8 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_a_multi_select_field_with_the_given_name_attribute_and_given_values_are_selected()
+    public function it_can_assert_that_a_multi_select_field_with_the_given_name_attribute_and_given_values_are_selected(
+    )
     {
         $this->visit('/form')
             ->seeIsSelected('multi-select-1', 'atl')
@@ -363,7 +364,8 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
-    public function it_can_assert_that_a_multi_select_field_with_the_given_name_attribute_and_given_value_are_not_selected()
+    public function it_can_assert_that_a_multi_select_field_with_the_given_name_attribute_and_given_value_are_not_selected(
+    )
     {
         $this->visit('/form')
             ->dontSeeIsSelected('multi-select-1', 'ams')
@@ -434,52 +436,38 @@ class InteractsWithPageTest extends \SeleniumTestCase
     /** @test */
     public function it_can_click_a_given_link_using_an_id_attribute()
     {
-        $this->visit('/login')
+        $this->visit('/form')
             ->click('#registerLinkId')
             ->click('registerLinkId');
     }
 
-//    /** @test */
-//    public function it_can_type_text_into_an_input_using_an_id_css_selector()
-//    {
-//        $this->visit('/login')
-//            ->type('Some test text', '#testTextInput');
-//    }
-//
-//    /** @test */
-//    public function it_can_type_text_into_an_input_using_a_name_attribute()
-//    {
-//        $this->visit('/login')
-//            ->type('Some test text', 'test-text-input');
-//    }
-//
-//    /** @test */
-//    public function it_can_type_text_into_an_input_using_an_id_attribute()
-//    {
-//        $this->visit('/login')
-//            ->type('Some test text', 'testTextInput');
-//    }
-//
-//    /** @test */
-//    public function it_can_type_text_into_a_text_area_using_an_id_css_selector()
-//    {
-//        $this->visit('/login')
-//            ->type('Some test text', '#testTextArea');
-//    }
-//
-//    /** @test */
-//    public function it_can_type_text_into_a_text_area_using_a_name_attribute()
-//    {
-//        $this->visit('/login')
-//            ->type('Some test text', 'test-text-area');
-//    }
-//
-//    /** @test */
-//    public function it_can_type_text_into_a_text_area_using_an_id_attribute()
-//    {
-//        $this->visit('/login')
-//            ->type('Some test text', 'testTextArea');
-//    }
+    /** @test */
+    public function it_can_type_text_into_an_input_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->type('Some test text', 'text-input-1');
+    }
+
+    /** @test */
+    public function it_can_type_text_into_an_input_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->type('Some test text', '#textInput1');
+    }
+
+    /** @test */
+    public function it_can_type_text_into_an_textarea_using_an_name_attribute()
+    {
+        $this->visit('/form')
+            ->type('Some test text', 'textarea-1');
+    }
+
+    /** @test */
+    public function it_can_type_text_into_an_textarea_using_an_id_attribute()
+    {
+        $this->visit('/form')
+            ->type('Some test text', '#textInput1');
+    }
 //
 //    /** @test */
 //    public function it_can_press_a_given_button_using_the_button_text()

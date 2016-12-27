@@ -370,26 +370,26 @@ trait InteractsWithPage
         return $this;
     }
 
-//    /**
-//     * Fill a text field with the given text.
-//     *
-//     * @param string $text
-//     * @param string $element
-//     *
-//     * @return $this
-//     */
-//    public function type($text, $element)
-//    {
-//        $textField = $this->crawler()->selectTextField($element);
-//
-//        if (! $textField) {
-//            throw new InvalidArgumentException("Could not find any text field elements with a name or ID attribute of [{$element}].");
-//        }
-//
-//        $textField->value($text);
-//
-//        return $this;
-//    }
+    /**
+     * Fill a text field with the given text.
+     *
+     * @param string $text
+     * @param string $element
+     *
+     * @return $this
+     */
+    public function type($text, $element)
+    {
+        $textField = $this->filterByNameOrId($element, 'input,textarea');
+
+        if (! count($textField)) {
+            throw new InvalidArgumentException("Could not find any text field elements with a name or ID attribute of [{$element}].");
+        }
+
+        $textField->element()->value($text);
+
+        return $this;
+    }
 
 //    /**
 //     * Press a button with the given button text, name or ID attribute.
@@ -473,15 +473,36 @@ trait InteractsWithPage
      */
     protected function filterByNameOrId($name, $elements = '*')
     {
+        return $this->crawler()->filter(implode(', ', $this->getElements($name, $elements)));
+    }
+
+    /**
+     * Get the elements for the filter.
+     *
+     * @param string $name
+     * @param string $elements
+     *
+     * @return array
+     */
+    protected function getElements($name, $elements)
+    {
         $name = ltrim($name, '#');
 
-        $elements = is_array($elements) ? $elements : [$elements];
+        return collect(explode(',', $elements))->map(function ($element) use ($name) {
+            $selector = "{$element}#{$name}";
 
-        $elements = collect($elements)->map(function ($element) use ($name) {
-            return "{$element}#{$name}, {$element}[@name='{$name}']";
+            preg_match('/\[.*\]/', $element, $options);
+
+            if (! empty($options)) {
+                $tag = preg_split('/\[.*\]/', $element)[0];
+                $options = trim($options[0], '[,]');
+                $selector .= ", //{$tag}[@{$options}][@name='{$name}']";
+            } else {
+                $selector .= ", //{$element}[@name='{$name}']";
+            }
+
+            return $selector;
         })->all();
-
-        return $this->crawler()->filter(implode(', ', $elements));
     }
 
     /**
