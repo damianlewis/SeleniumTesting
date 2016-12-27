@@ -427,6 +427,36 @@ class InteractsWithPageTest extends \SeleniumTestCase
     }
 
     /** @test */
+    public function it_can_assert_that_an_element_with_the_given_name_attribute_is_disabled()
+    {
+        $this->visit('/form')
+            ->seeIsDisabled('disabled-text-input-1');
+    }
+
+    /** @test */
+    public function it_can_assert_that_an_element_with_the_given_id_attribute_is_disabled()
+    {
+        $this->visit('/form')
+            ->seeIsDisabled('#disabledtextinput1')
+            ->seeIsDisabled('disabledtextinput1');
+    }
+
+    /** @test */
+    public function it_can_assert_that_an_element_with_the_given_name_attribute_is_not_disabled()
+    {
+        $this->visit('/form')
+            ->dontSeeIsDisabled('text-input-1');
+    }
+
+    /** @test */
+    public function it_can_assert_that_an_element_with_the_given_id_attribute_is_not_disabled()
+    {
+        $this->visit('/form')
+            ->dontSeeIsDisabled('#textinput1')
+            ->dontSeeIsDisabled('textinput1');
+    }
+
+    /** @test */
     public function it_can_click_a_given_link_using_the_link_text()
     {
         $this->visit('/form')

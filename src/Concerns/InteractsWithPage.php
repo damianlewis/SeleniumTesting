@@ -8,6 +8,7 @@ use SeleniumTesting\Constraints\HasSource;
 use SeleniumTesting\Constraints\HasText;
 use SeleniumTesting\Constraints\HasValue;
 use SeleniumTesting\Constraints\IsChecked;
+use SeleniumTesting\Constraints\IsDisabled;
 use SeleniumTesting\Constraints\IsSelected;
 use SeleniumTesting\HttpException;
 use SeleniumTesting\Constraints\ReversePageConstraint;
@@ -343,6 +344,31 @@ trait InteractsWithPage
     public function dontSeeIsChecked($selector)
     {
         return $this->assertInPage(new IsChecked($selector), true);
+    }
+
+    /**
+     * Assert that the given form element is disabled.
+     *
+     * @param  string $selector
+     * @param  bool   $negate
+     *
+     * @return $this
+     */
+    public function seeIsDisabled($selector, $negate = false)
+    {
+        return $this->assertInPage(new IsDisabled($selector), $negate);
+    }
+
+    /**
+     * Assert that the given form element is not disabled.
+     *
+     * @param  string $selector
+     *
+     * @return $this
+     */
+    public function dontSeeIsDisabled($selector)
+    {
+        return $this->assertInPage(new IsDisabled($selector), true);
     }
 
     /**
