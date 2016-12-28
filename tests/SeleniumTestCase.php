@@ -18,7 +18,7 @@ abstract class SeleniumTestCase extends SeleniumTesting\SeleniumTestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../tests/laravel/bootstrap/app.php';
+        $app = require __DIR__.'/../tests/test-app/bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
