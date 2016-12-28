@@ -2,8 +2,6 @@
 
 namespace SeleniumTesting\Concerns;
 
-use App\User;
-
 trait ImpersonatesUsers
 {
 
@@ -15,7 +13,7 @@ trait ImpersonatesUsers
      *
      * @return $this
      */
-    protected function actingAs(User $user, $password = 'password')
+    protected function actingAs($user, $password = 'password')
     {
         $this->visit('/login')
             ->type($user->email, 'email')
