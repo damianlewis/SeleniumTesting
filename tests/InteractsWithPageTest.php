@@ -1,21 +1,7 @@
 <?php
 
-class InteractsWithPageTest extends \SeleniumTestCase
+class InteractsWithPageTest extends SeleniumTestCase
 {
-
-    public function setUp()
-    {
-        parent::setUp();
-
-//        Artisan::call('migrate');
-    }
-
-    public function tearDown()
-    {
-//        Artisan::call('migrate:reset');
-
-        parent::tearDown();
-    }
 
     /** @test */
     public function it_can_visit_a_given_uri()

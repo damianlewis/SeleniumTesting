@@ -40,7 +40,7 @@ class IsSelected extends FormFieldConstraint
      *
      * @throws \PHPUnit_Framework_ExpectationFailedException
      */
-    public function getSelectedValue(Crawler $crawler)
+    protected function getSelectedValue(Crawler $crawler)
     {
         $field = $this->field($crawler);
 

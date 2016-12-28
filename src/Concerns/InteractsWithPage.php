@@ -2,6 +2,10 @@
 
 namespace SeleniumTesting\Concerns;
 
+use SeleniumTesting\Crawler;
+use SeleniumTesting\Constraints\PageConstraint;
+use SeleniumTesting\Constraints\ReversePageConstraint;
+use SeleniumTesting\Constraints\HasElement;
 use SeleniumTesting\Constraints\HasInElement;
 use SeleniumTesting\Constraints\HasLink;
 use SeleniumTesting\Constraints\HasSource;
@@ -11,12 +15,8 @@ use SeleniumTesting\Constraints\IsChecked;
 use SeleniumTesting\Constraints\IsDisabled;
 use SeleniumTesting\Constraints\IsSelected;
 use SeleniumTesting\HttpException;
-use SeleniumTesting\Constraints\ReversePageConstraint;
-use SeleniumTesting\Crawler;
-use SeleniumTesting\Constraints\HasElement;
-use SeleniumTesting\Constraints\PageConstraint;
-use PHPUnit_Framework_ExpectationFailedException as PHPUnitException;
 use SeleniumTesting\InvalidArgumentException;
+use PHPUnit_Framework_ExpectationFailedException as PHPUnitException;
 use PHPUnit_Extensions_Selenium2TestCase_WebDriverException as Selenium2TestCase_WebDriverException;
 
 trait InteractsWithPage
@@ -550,38 +550,6 @@ trait InteractsWithPage
 
         return $this;
     }
-
-//    /**
-//     * Filter elements according to the given attributes.
-//     *
-//     * @param string       $name
-//     * @param array        $attributes
-//     * @param array|string $elements
-//     *
-//     * @return \SeleniumTesting\Crawler
-//     */
-//    protected function filterByAttributes($name, array $attributes, $elements = '*')
-//    {
-////        $name = str_replace('#', '', $name);
-//
-////        $id = str_replace(['[', ']'], ['\\[', '\\]'], $name);
-//
-//        $selectors = [];
-//
-//        $elements = is_array($elements) ? $elements : [$elements];
-//
-//        foreach ($elements as $element) {
-//            foreach ($attributes as $attribute) {
-//                $selectors[] = "//{$element}[@{$attribute}='{$name}']";
-//            }
-//        }
-//
-////        array_walk($elements, function (&$element) use ($name, $id) {
-////            $element = "//{$element}[@{}], {$element}[name='{$name}']";
-////        });
-//
-//        return $this->crawler()->filter($selectors);
-//    }
 
     /**
      * Filter elements according to the given name or ID attribute.

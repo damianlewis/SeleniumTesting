@@ -32,7 +32,7 @@ class IsChecked extends FormFieldConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         $crawler = $this->crawler($crawler);
 

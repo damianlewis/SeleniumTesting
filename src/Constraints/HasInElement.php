@@ -39,7 +39,7 @@ class HasInElement extends PageConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         $elements = $this->crawler($crawler)->filter($this->selector);
 

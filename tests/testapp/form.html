@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="aPKKgaVdDtRJEJgIqG3DA4WLctMCbEUX5OPalwPY">
+
+    <title>Laravel</title>
+
+    <!-- Styles -->
+    <link href="/css/app.css" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script>
+        window.Laravel = {"csrfToken":"aPKKgaVdDtRJEJgIqG3DA4WLctMCbEUX5OPalwPY"}    </script>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+
+                <!-- Collapsed Hamburger -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <!-- Branding Image -->
+                <a class="navbar-brand" href="http://seleniumtesting.dev">
+                    Laravel
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                <!-- Left Side Of Navbar -->
+                <ul class="nav navbar-nav">
+                    &nbsp;
+                </ul>
+
+                <!-- Right Side Of Navbar -->
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Authentication Links -->
+                    <li><a href="http://seleniumtesting.dev/login">Login</a></li>
+                    <li><a href="http://seleniumtesting.dev/register" id="registerLinkId">Register</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="col-md-6">
+            <form class="form-horizontal">
+
+                <fieldset>
+                    <legend>Default Form Elements</legend>
+                    <div class="form-group">
+                        <label for="textinput1" class="col-md-2 control-label">Text field</label>
+                        <div class="col-md-10">
+                            <input class="form-control" placeholder="Default Text Field" type="text" name="text-input-1" id="textinput1" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="textinputwithvalue1" class="col-md-2 control-label">Text field with value</label>
+                        <div class="col-md-10">
+                            <input name="text-input-with-value-1" id="textinputwithvalue1" value="Text input with value" class="form-control" placeholder="Default Text Field" type="text" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHklEQVQ4EaVTO26DQBD1ohQWaS2lg9JybZ+AK7hNwx2oIoVf4UPQ0Lj1FdKktevIpel8AKNUkDcWMxpgSaIEaTVv3sx7uztiTdu2s/98DywOw3Dued4Who/M2aIx5lZV1aEsy0+qiwHELyi+Ytl0PQ69SxAxkWIA4RMRTdNsKE59juMcuZd6xIAFeZ6fGCdJ8kY4y7KAuTRNGd7jyEBXsdOPE3a0QGPsniOnnYMO67LgSQN9T41F2QGrQRRFCwyzoIF2qyBuKKbcOgPXdVeY9rMWgNsjf9ccYesJhk3f5dYT1HX9gR0LLQR30TnjkUEcx2uIuS4RnI+aj6sJR0AM8AaumPaM/rRehyWhXqbFAA9kh3/8/NvHxAYGAsZ/il8IalkCLBfNVAAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Auto Complete</label>
+                        <div class="col-md-10">
+                            <input class="form-control" placeholder="Type somethine..." type="text" list="list">
+                            <datalist id="list">
+                                <option value="Alexandra">Alexandra</option>
+                                <option value="Alice">Alice</option>
+                                <option value="Anastasia">Anastasia</option>
+                                <option value="Avelina">Avelina</option>
+                                <option value="Basilia">Basilia</option>
+                                <option value="Beatrice">Beatrice</option>
+                                <option value="Cassandra">Cassandra</option>
+                                <option value="Cecil">Cecil</option>
+                                <option value="Clemencia">Clemencia</option>
+                                <option value="Desiderata">Desiderata</option>
+                                <option value="Dionisia">Dionisia</option>
+                                <option value="Edith">Edith</option>
+                                <option value="Eleanora">Eleanora</option>
+                                <option value="Elizabeth">Elizabeth</option>
+                                <option value="Emma">Emma</option>
+                                <option value="Felicia">Felicia</option>
+                                <option value="Florence">Florence</option>
+                                <option value="Galiana">Galiana</option>
+                                <option value="Grecia">Grecia</option>
+                                <option value="Helen">Helen</option>
+                                <option value="Helewisa">Helewisa</option>
+                                <option value="Idonea">Idonea</option>
+                                <option value="Isabel">Isabel</option>
+                                <option value="Joan">Joan</option>
+                                <option value="Juliana">Juliana</option>
+                                <option value="Karla">Karla</option>
+                                <option value="Karyn">Karyn</option>
+                                <option value="Kate">Kate</option>
+                                <option value="Lakisha">Lakisha</option>
+                                <option value="Lana">Lana</option>
+                                <option value="Laura">Laura</option>
+                                <option value="Leona">Leona</option>
+                                <option value="Mandy">Mandy</option>
+                                <option value="Margaret">Margaret</option>
+                                <option value="Maria">Maria</option>
+                                <option value="Nanacy">Nanacy</option>
+                                <option value="Nicole">Nicole</option>
+                                <option value="Olga">Olga</option>
+                                <option value="Pamela">Pamela</option>
+                                <option value="Patricia">Patricia</option>
+                                <option value="Qiana">Qiana</option>
+                                <option value="Rachel">Rachel</option>
+                                <option value="Ramona">Ramona</option>
+                                <option value="Samantha">Samantha</option>
+                                <option value="Sandra">Sandra</option>
+                                <option value="Tanya">Tanya</option>
+                                <option value="Teresa">Teresa</option>
+                                <option value="Ursula">Ursula</option>
+                                <option value="Valerie">Valerie</option>
+                                <option value="Veronica">Veronica</option>
+                                <option value="Wilma">Wilma</option>
+                                <option value="Yasmin">Yasmin</option>
+                                <option value="Zelma">Zelma</option>
+                            </datalist>
+                            <p class="note"><strong>Note:</strong> works in Chrome, Firefox, Opera and IE10.</p>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passwordinput1" name="password-input-1-label" id="passwordinput1label" class="col-md-2 control-label">Password field</label>
+                        <div class="col-md-10">
+                            <input name="password-input-1" id="passwordinput1" class="form-control" placeholder="Password field" type="password" value="mypassword" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIUlEQVQ4EX2TOYhTURSG87IMihDsjGghBhFBmHFDHLWwSqcikk4RRKJgk0KL7C8bMpWpZtIqNkEUl1ZCgs0wOo0SxiLMDApWlgOPrH7/5b2QkYwX7jvn/uc//zl3edZ4PPbNGvF4fC4ajR5VrNvt/mo0Gr1ZPOtfgWw2e9Lv9+chX7cs64CS4Oxg3o9GI7tUKv0Q5o1dAiTfCgQCLwnOkfQOu+oSLyJ2A783HA7vIPLGxX0TgVwud4HKn0nc7Pf7N6vV6oZHkkX8FPG3uMfgXC0Wi2vCg/poUKGGcagQI3k7k8mcp5slcGswGDwpl8tfwGJg3xB6Dvey8vz6oH4C3iXcFYjbwiDeo1KafafkC3NjK7iL5ESFGQEUF7Sg+ifZdDp9GnMF/KGmfBdT2HCwZ7TwtrBPC7rQaav6Iv48rqZwg+F+p8hOMBj0IbxfMdMBrW5pAVGV/ztINByENkU0t5BIJEKRSOQ3Aj+Z57iFs1R5NK3EQS6HQqF1zmQdzpFWq3W42WwOTAf1er1PF2USFlC+qxMvFAr3HcexWX+QX6lUvsKpkTyPSEXJkw6MQ4S38Ljdbi8rmM/nY+CvgNcQqdH6U/xrYK9t244jZv6ByUOSiDdIfgBZ12U6dHEHu9TpdIr8F0OP692CtzaW/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="textarea1" class="col-md-2 control-label">Textarea</label>
+                        <div class="col-md-10">
+                            <textarea name="textarea-1" id="textarea1" class="form-control" placeholder="Textarea" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="textareawithvalue1" class="col-md-2 control-label">Textarea with value</label>
+                        <div class="col-md-10">
+                            <textarea name="text-area-with-value-1" id="textareawithvalue1" class="form-control" placeholder="Textarea" rows="4">Text area with value</textarea>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>Unstyled Checkbox</legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Checkbox default</label>
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                <label for="checkbox1" name="checkbox-1-label" id="checkbox1label">
+                                    <input type="checkbox" name="checkbox-1" id="checkbox1">
+                                    Checkbox 1 </label>
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="checkbox-2" id="checkbox2">Checkbox 2</label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="checkbox-3" id="checkbox3">
+                                    Checkbox 3 </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline</label>
+                        <div class="col-md-10">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="checkbox-4" id="checkbox4">
+                                Checkbox 4 </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="checkbox-5" id="checkbox5">Checkbox 5</label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="checkbox-6" id="checkbox6">
+                                Checkbox 6 </label>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>Unstyled Radiobox</legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Radios default</label>
+                        <div class="col-md-10">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="radio-group-1" id="radiobox1">
+                                    Radiobox 1 </label>
+                            </div>
+                            <div class="radio">
+                                <label><input type="radio" name="radio-group-1" id="radiobox2">Radiobox 2</label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="radio-group-1" id="radiobox3">
+                                    Radiobox 3 </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline</label>
+                        <div class="col-md-10">
+                            <label class="radio radio-inline">
+                                <input type="radio" name="radio-group-2" id="radiobox4">
+                                Radiobox 4 </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" name="radio-group-2" id="radiobox5">Radiobox 5</label>
+                            <label class="radio radio-inline">
+                                <input type="radio" name="radio-group-2" id="radiobox6">
+                                Radiobox 6 </label>
+                        </div>
+                    </div>
+
+
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>File inputs</legend>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">File input</label>
+                        <div class="col-md-10">
+                            <input type="file" class="btn btn-default" id="exampleInputFile1">
+                            <p class="help-block">
+                                some help text here.
+                            </p>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset class="demo-switcher-1">
+                    <legend>Styled Checkbox and Radiobox</legend>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Checkbox Styles</label>
+                        <div class="col-md-10">
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" name="checkbox-7" id="checkbox7">
+                                    <span>Checkbox 7</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" name="checkbox-8" id="checkbox8" checked><span>Checkbox 8</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" name="checkbox-9" id="checkbox9">
+                                    <span>Checkbox 9</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" name="checkbox-10" id="checkbox10" checked><span>Checkbox 10</span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline</label>
+                        <div class="col-md-10">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="checkbox style-0">
+                                <span>Checkbox 11</span>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="checkbox style-0">
+                                <span>Checkbox 12</span>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="checkbox style-0">
+                                <span>Checkbox 13</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset class="demo-switcher-1">
+                    <legend></legend>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Radios Styles</label>
+                        <div class="col-md-10">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" name="radio-group-3" id="radioboxCircle" value="circle">
+                                    <span>Circle</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" name="radio-group-3" id="radioboxSqaure" value="square" checked><span>Square</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" name="radio-group-3" id="radioboxTriangle" value="triangle">
+                                    <span>Triangle</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" name="radio-group-3" id="radioboxRactangle" value="rectangle"><span>Rectangle</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline</label>
+                        <div class="col-md-10">
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox" name="radio-group-4" id="radioboxRed" value="red"><span>Red</span>
+                            </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox" name="radio-group-4" id="radioboxGreen" value="green" checked>
+                                <span>Green</span>
+                            </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox" name="radio-group-4" id="radioboxBlue" value="blue"><span>Blue</span>
+                            </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox" name="radio-group-4" id="radioboxYellow" value="yellow">
+                                <span>Yellow</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>Unstyled Select</legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="select1">Select</label>
+                        <div class="col-md-10">
+
+                            <select class="form-control" name="select-1" id="select1">
+                                <option value="ams">Amsterdam</option>
+                                <option value="atl">Atlanta</option>
+                                <option value="bal">Baltimore</option>
+                                <option value="bos" selected>Boston</option>
+                                <option value="bue">Buenos Aires</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="multiselect1">Multiple select</label>
+                        <div class="col-md-10">
+                            <select multiple="multiple" name="multi-select-1" id="multiselect1" class="form-control custom-scroll" title="Click to Select a City">
+                                <option value="ams">Amsterdam</option>
+                                <option value="atl" selected="selected">Atlanta</option>
+                                <option value="bal">Baltimore</option>
+                                <option value="bos">Boston</option>
+                                <option value="bue">Buenos Aires</option>
+                                <option value="cal">Calgary</option>
+                                <option value="chi" selected="selected">Chicago</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-default" type="submit">
+                                Cancel
+                            </button>
+                            <button class="btn btn-primary" type="submit" name="submit-button-1" id="submitbutton1">
+                                <i class="fa fa-save"></i>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <form class="form-horizontal">
+
+                <fieldset>
+                    <legend>Disabled Form Elements</legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Text field</label>
+                        <div class="col-md-10">
+                            <input name="disabled-text-input-1" id="disabledtextinput1" class="form-control" disabled="disabled" placeholder="Default Text Field" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Auto Complete</label>
+                        <div class="col-md-10">
+                            <input class="form-control" disabled="disabled" placeholder="Type somethine..." type="text" list="list">
+                            <p class="note"><strong>Note:</strong> works in Chrome, Firefox, Opera and IE10.</p>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Password field</label>
+                        <div class="col-md-10">
+                            <input class="form-control" disabled="disabled" placeholder="Password field" type="password" value="mypassword" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Textarea</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" disabled="disabled" placeholder="Textarea" rows="4"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Unstyled Checkbox <small>(disabled)</small></legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Checkbox</label>
+                        <div class="col-md-10">
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" disabled="disabled" name="checkbox-3" value="">
+                                    Checkbox 1 </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" disabled="disabled" name="checkbox-3" value="">
+                                    Checkbox 2 </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" disabled="disabled" name="checkbox-3" value="">
+                                    Checkbox 3 </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline Checkbox</label>
+                        <div class="col-md-10">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" disabled="disabled" name="checkbox-4" value="">
+                                Checkbox 1 </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" disabled="disabled" name="checkbox-4" value="">
+                                Checkbox 2 </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" disabled="disabled" name="checkbox-4" value="">
+                                Checkbox 3 </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Unstyled Radiobox <small>(disabled)</small></legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Radios</label>
+                        <div class="col-md-10">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" disabled="disabled" name="radio-3" value="">
+                                    Radiobox 1 </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" disabled="disabled" name="radio-3" value="">
+                                    Radiobox 2 </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" disabled="disabled" name="radio-3" value="">
+                                    Radiobox 3 </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline Radiobox</label>
+                        <div class="col-md-10">
+                            <label class="radio radio-inline">
+                                <input type="radio" disabled="disabled" name="radio-4" value="">
+                                Radiobox 1 </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" disabled="disabled" name="radio-4" value="">
+                                Radiobox 2 </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" disabled="disabled" name="radio-4" value="">
+                                Radiobox 3 </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>File inputs <small>(disabled)</small></legend>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">File input</label>
+                        <div class="col-md-10">
+                            <input type="file" class="btn btn-default" disabled="disabled" id="exampleInputFile2">
+                            <p class="help-block">
+                                some help text here.
+                            </p>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset class="demo-switcher-1">
+                    <legend>Styled Checkbox and Radiobox <small>(disabled)</small></legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Checkbox Styles</label>
+                        <div class="col-md-10">
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" checked="checked" disabled="disabled">
+                                    <span>Checkbox 1</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" disabled="disabled">
+                                    <span>Checkbox 2</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="checkbox style-0" disabled="disabled">
+                                    <span>Checkbox 3</span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline</label>
+                        <div class="col-md-10">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="checkbox style-0" disabled="disabled">
+                                <span>Checkbox 1</span>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="checkbox style-0" disabled="disabled">
+                                <span>Checkbox 2</span>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" class="checkbox style-0" disabled="disabled">
+                                <span>Checkbox 3</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset class="demo-switcher-1">
+                    <legend></legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Radios Styles</label>
+                        <div class="col-md-10">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" checked="checked" disabled="disabled" name="style-0">
+                                    <span>Radiobox 1</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" disabled="disabled" name="style-0">
+                                    <span>Radiobox 2</span>
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" class="radiobox style-0" disabled="disabled" name="style-0">
+                                    <span>Radiobox 3</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Inline</label>
+                        <div class="col-md-10">
+                            <label class="radio radio-inline">
+
+                                <input type="radio" class="radiobox style-0" disabled="disabled" name="style-0a">
+                                <span>Radiobox 1</span>
+
+                            </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox style-0" disabled="disabled" name="style-0a">
+                                <span>Radiobox 2</span>
+                            </label>
+                            <label class="radio radio-inline">
+                                <input type="radio" class="radiobox style-0" disabled="disabled" name="style-0a">
+                                <span>Radiobox 3</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+                    <legend>Unstyled Select</legend>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Select</label>
+                        <div class="col-md-10">
+                            <select class="form-control" disabled="disabled">
+                                <option>Amsterdam</option>
+                                <option>Atlanta</option>
+                                <option>Baltimore</option>
+                                <option>Boston</option>
+                                <option>Buenos Aires</option>
+                                <option>Calgary</option>
+                                <option>Chicago</option>
+                                <option>Denver</option>
+                                <option>Dubai</option>
+                                <option>Frankfurt</option>
+                                <option>Hong Kong</option>
+                                <option>Honolulu</option>
+                                <option>Houston</option>
+                                <option>Kuala Lumpur</option>
+                                <option>London</option>
+                                <option>Los Angeles</option>
+                                <option>Melbourne</option>
+                                <option>Mexico City</option>
+                                <option>Miami</option>
+                                <option>Minneapolis</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Multiple select</label>
+                        <div class="col-md-10">
+                            <select multiple="multiple" disabled="disabled" class="form-control custom-scroll" title="Click to Select a City">
+                                <option>Amsterdam</option>
+                                <option selected="selected">Atlanta</option>
+                                <option>Baltimore</option>
+                                <option>Boston</option>
+                                <option>Buenos Aires</option>
+                                <option>Calgary</option>
+                                <option selected="selected">Chicago</option>
+                                <option>Denver</option>
+                                <option>Dubai</option>
+                                <option>Frankfurt</option>
+                                <option>Hong Kong</option>
+                                <option>Honolulu</option>
+                                <option>Houston</option>
+                                <option>Kuala Lumpur</option>
+                                <option>London</option>
+                                <option>Los Angeles</option>
+                                <option>Melbourne</option>
+                                <option>Mexico City</option>
+                                <option>Miami</option>
+                                <option>Minneapolis</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" disabled="disabled" type="submit">
+                                <i class="fa fa-save"></i>
+                                Submit
+                            </button>
+                            <button class="btn btn-default" disabled="disabled" type="submit">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/js/app.js"></script>
+</body>
+</html>

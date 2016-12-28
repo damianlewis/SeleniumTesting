@@ -29,7 +29,7 @@ class HasSource extends PageConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         $pattern = $this->getEscapedPattern($this->source);
 
@@ -40,7 +40,7 @@ class HasSource extends PageConstraint
      * Returns a string representation of the object.
      *
      * @return string
-//     */
+     */
     public function toString()
     {
         return "the HTML [{$this->source}]";

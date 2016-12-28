@@ -5,14 +5,12 @@ namespace SeleniumTesting;
 use PHPUnit_Extensions_Selenium2TestCase;
 use PHPUnit_Framework_Error;
 use PHPUnit_Framework_Exception;
-use SeleniumTesting\Concerns\ImpersonatesUsers;
 use SeleniumTesting\Concerns\InteractsWithPage;
 
 abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
 {
 
     use InteractsWithPage;
-    use ImpersonatesUsers;
 
     /**
      * The Illuminate application instance.
@@ -120,7 +118,7 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
         if ($e instanceof PHPUnit_Framework_Exception) {
             $fileName = $this->screenShotPath.DIRECTORY_SEPARATOR.get_class($this).'_'.date('Y-m-d\TH-i-s').'.png';
             file_put_contents($fileName, $this->currentScreenshot());
-            $error = new PHPUnit_Framework_Error("Screen shot for '{$this->url()}' saved to: {$fileName}",
+            $error = new PHPUnit_Framework_Error("Screen shot for [{$this->url()}] saved to: {$fileName}",
                 $e->getCode(), $e->getFile(), $e->getLine(), $e);
         } else {
             $error = $e;

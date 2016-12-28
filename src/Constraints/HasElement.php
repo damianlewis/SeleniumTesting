@@ -2,7 +2,7 @@
 
 namespace SeleniumTesting\Constraints;
 
-use PHPUnit_Extensions_Selenium2TestCase_Element as Selenium2Element;
+use PHPUnit_Extensions_Selenium2TestCase_Element as Selenium2TestCase_Element;
 
 class HasElement extends PageConstraint
 {
@@ -56,7 +56,7 @@ class HasElement extends PageConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         $elements = $this->crawler($crawler)->filter($this->selector);
 
@@ -82,6 +82,24 @@ class HasElement extends PageConstraint
     }
 
     /**
+     * Determines if the given element has the attributes.
+     *
+     * @param Selenium2TestCase_Element $element
+     *
+     * @return bool
+     */
+    protected function hasAttributes(Selenium2TestCase_Element $element)
+    {
+        foreach ($this->attributes as $name => $value) {
+            if ($element->attribute($name) != $value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Returns a string representation of the object.
      *
      * @return string
@@ -99,23 +117,5 @@ class HasElement extends PageConstraint
         }
 
         return $message;
-    }
-
-    /**
-     * Determines if the given element has the attributes.
-     *
-     * @param Selenium2Element $element
-     *
-     * @return bool
-     */
-    private function hasAttributes(Selenium2Element $element)
-    {
-        foreach ($this->attributes as $name => $value) {
-            if ($element->attribute($name) != $value) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

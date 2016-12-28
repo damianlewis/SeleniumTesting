@@ -24,7 +24,7 @@ class HasValue extends FormFieldConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         $crawler = $this->crawler($crawler);
 
@@ -40,7 +40,7 @@ class HasValue extends FormFieldConstraint
      *
      * @throws \PHPUnit_Framework_ExpectationFailedException
      */
-    public function getInputOrTextAreaValue(Crawler $crawler)
+    protected function getInputOrTextAreaValue(Crawler $crawler)
     {
         $field = $this->field($crawler);
 

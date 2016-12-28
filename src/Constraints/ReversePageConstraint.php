@@ -29,7 +29,7 @@ class ReversePageConstraint extends PageConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         return ! $this->pageConstraint->matches($crawler);
     }

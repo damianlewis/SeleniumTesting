@@ -2,10 +2,10 @@
 
 namespace SeleniumTesting\Constraints;
 
+use SeleniumTesting\Crawler;
 use PHPUnit_Framework_Constraint;
 use SebastianBergmann\Comparator\ComparisonFailure;
 use PHPUnit_Framework_ExpectationFailedException as FailedExpection;
-use SeleniumTesting\Crawler;
 
 abstract class PageConstraint extends PHPUnit_Framework_Constraint
 {

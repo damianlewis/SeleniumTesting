@@ -38,7 +38,7 @@ class HasLink extends PageConstraint
      *
      * @return bool
      */
-    public function matches($crawler)
+    protected function matches($crawler)
     {
         $links = $this->crawler($crawler)->selectLink($this->text);
 
@@ -64,27 +64,11 @@ class HasLink extends PageConstraint
     }
 
     /**
-     * Add a root if the URL is relative and strip any trailing slashes.
-     *
-     * @return mixed
-     */
-    protected function absoluteUrl()
-    {
-        $url = rtrim($this->url, '/');
-
-        if (! starts_with($url, ['http', 'https'])) {
-            return ['http://'.$url, 'https://'.$url];
-        }
-
-        return $url;
-    }
-
-    /**
      * Returns the description of the failure.
      *
      * @return string
      */
-    public function getFailureDescription()
+    protected function getFailureDescription()
     {
         $description = "has a link with the text [{$this->text}]";
 
@@ -109,5 +93,21 @@ class HasLink extends PageConstraint
         }
 
         return $description;
+    }
+
+    /**
+     * Add a root if the URL is relative and strip any trailing slashes.
+     *
+     * @return mixed
+     */
+    protected function absoluteUrl()
+    {
+        $url = rtrim($this->url, '/');
+
+        if (! starts_with($url, ['http', 'https'])) {
+            return ['http://'.$url, 'https://'.$url];
+        }
+
+        return $url;
     }
 }
