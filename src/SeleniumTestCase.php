@@ -2,6 +2,8 @@
 
 namespace SeleniumTesting;
 
+use Illuminate\Foundation\Testing\Concerns\InteractsWithConsole;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use PHPUnit_Extensions_Selenium2TestCase;
 use PHPUnit_Framework_Error;
 use PHPUnit_Framework_Exception;
@@ -11,6 +13,7 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
 {
 
     use InteractsWithPage;
+    use InteractsWithConsole;
 
     /**
      * The Illuminate application instance.
@@ -18,6 +21,27 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      * @var \Illuminate\Foundation\Application
      */
     protected $app;
+
+    /**
+     * The callbacks that should be run after the application is created.
+     *
+     * @var array
+     */
+    protected $afterApplicationCreatedCallbacks = [];
+
+    /**
+     * The callbacks that should be run before the application is destroyed.
+     *
+     * @var array
+     */
+    protected $beforeApplicationDestroyedCallbacks = [];
+
+    /**
+     * Indicates if we have made it through the base setUp function.
+     *
+     * @var bool
+     */
+    protected $setUpHasRun = false;
 
     /**
      * he browser to run the tests through.
@@ -78,8 +102,16 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
         $this->setDesiredCapabilities($this->capabilities);
 
         if (! $this->app) {
-            $this->app = $this->createApplication();
+            $this->refreshApplication();
         }
+
+        $this->setUpTraits();
+
+        foreach ($this->afterApplicationCreatedCallbacks as $callback) {
+            call_user_func($callback);
+        }
+
+        $this->setUpHasRun = true;
     }
 
     /**
@@ -95,15 +127,36 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
     }
 
     /**
+     * Boot the testing helper traits.
+     *
+     * @return void
+     */
+    protected function setUpTraits()
+    {
+        $uses = array_flip(class_uses_recursive(static::class));
+
+        if (isset($uses[DatabaseMigrations::class])) {
+            $this->runDatabaseMigrations();
+        }
+    }
+
+    /**
      * Switches the application environment to local.
      */
     protected function tearDown()
     {
         if ($this->app) {
+            foreach ($this->beforeApplicationDestroyedCallbacks as $callback) {
+                call_user_func($callback);
+            }
             $this->app->flush();
 
             $this->app = null;
         }
+        $this->setUpHasRun = false;
+
+        $this->afterApplicationCreatedCallbacks = [];
+        $this->beforeApplicationDestroyedCallbacks = [];
     }
 
     /**
@@ -125,5 +178,31 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
         }
 
         parent::onNotSuccessfulTest($error);
+    }
+
+    /**
+     * Register a callback to be run after the application is created.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    public function afterApplicationCreated(callable $callback)
+    {
+        $this->afterApplicationCreatedCallbacks[] = $callback;
+
+        if ($this->setUpHasRun) {
+            call_user_func($callback);
+        }
+    }
+
+    /**
+     * Register a callback to be run before the application is destroyed.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    protected function beforeApplicationDestroyed(callable $callback)
+    {
+        $this->beforeApplicationDestroyedCallbacks[] = $callback;
     }
 }
