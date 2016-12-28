@@ -7,4 +7,4 @@ Homestead.json
 after.sh
 aliases
 scripts/
-test/
+tests/
