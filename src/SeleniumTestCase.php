@@ -2,8 +2,10 @@
 
 namespace SeleniumTesting;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithConsole;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use InvalidArgumentException;
 use PHPUnit_Extensions_Selenium2TestCase;
 use PHPUnit_Framework_Error;
 use PHPUnit_Framework_Exception;
@@ -79,6 +81,36 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
     protected $screenShotPath;
 
     /**
+     * The path to the laravel .env environment file.
+     *
+     * @var string
+     */
+    protected $envFile;
+
+    /**
+     * The path to the testing environment file.
+     * This file replaces the .env file whilst testing.
+     *
+     * @var string
+     */
+    protected $testingEnvFile;
+
+    /**
+     * The path to the local environment file.
+     * This file replaces the .env file when testing has finished.
+     *
+     * @var string
+     */
+    protected $localEnvFile;
+
+    /**
+     * Indicates if the required environment files exist.
+     *
+     * @var string
+     */
+    protected $envFilesChecked = false;
+
+    /**
      * Creates the application.
      * Needs to be implemented by subclasses.
      *
@@ -92,6 +124,9 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      */
     protected function setUp()
     {
+        $this->checkEnvFiles();
+        $this->switchEnvironment($this->testingEnvFile);
+
         if (! $this->app) {
             $this->refreshApplication();
         }
@@ -100,10 +135,6 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
         $this->setBrowserUrl($this->baseUrl);
         $this->setHost($this->host);
         $this->setDesiredCapabilities($this->capabilities);
-
-        if (! $this->app) {
-            $this->refreshApplication();
-        }
 
         $this->setUpTraits();
 
@@ -121,8 +152,6 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      */
     protected function refreshApplication()
     {
-        putenv('APP_ENV=testing');
-
         $this->app = $this->createApplication();
     }
 
@@ -153,10 +182,13 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
 
             $this->app = null;
         }
+
         $this->setUpHasRun = false;
 
         $this->afterApplicationCreatedCallbacks = [];
         $this->beforeApplicationDestroyedCallbacks = [];
+
+        $this->switchEnvironment($this->localEnvFile);
     }
 
     /**
@@ -204,5 +236,45 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
     protected function beforeApplicationDestroyed(callable $callback)
     {
         $this->beforeApplicationDestroyedCallbacks[] = $callback;
+    }
+
+    /**
+     * @return bool
+     * @throws InvalidArgumentException|FileNotFoundException
+     */
+    protected function switchEnvironment($env)
+    {
+        if ($this->envFilesChecked) {
+            return copy($env, $this->envFile);
+        }
+    }
+
+    protected function checkEnvFiles()
+    {
+        if (is_null($this->envFile)) {
+            throw new InvalidArgumentException("The path to the .env file must be defined.");
+        }
+
+        if (! file_exists($this->envFile)) {
+            throw new FileNotFoundException("The env file [{$this->envFile}] couldn't be found.");
+        }
+
+        if (is_null($this->testingEnvFile)) {
+            throw new InvalidArgumentException("The path to the testing environment file must be defined.");
+        }
+
+        if (! file_exists($this->testingEnvFile)) {
+            throw new FileNotFoundException("The testing environment file [{$this->testingEnvFile}] couldn't be found.");
+        }
+
+        if (is_null($this->localEnvFile)) {
+            throw new InvalidArgumentException("The path to the local environment file must be defined.");
+        }
+
+        if (! file_exists($this->localEnvFile)) {
+            throw new FileNotFoundException("The local environment file [{$this->localEnvFile}] couldn't be found.");
+        }
+
+        $this->envFilesChecked = true;
     }
 }
