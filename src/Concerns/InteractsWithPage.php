@@ -599,7 +599,7 @@ trait InteractsWithPage
      *
      * @return Crawler
      */
-    protected function filterByNameOrId($name, $elements = '*')
+    private function filterByNameOrId($name, $elements = '*')
     {
         return $this->crawler()->filter(implode(', ', $this->getElements($name, $elements)));
     }
@@ -612,7 +612,7 @@ trait InteractsWithPage
      *
      * @return array
      */
-    protected function getElements($name, $elements)
+    private function getElements($name, $elements)
     {
         $name = ltrim($name, '#');
 
@@ -640,7 +640,7 @@ trait InteractsWithPage
      *
      * @return string
      */
-    protected function fullUrl($uri)
+    private function fullUrl($uri)
     {
         return implode('/', [rtrim($this->baseUrl, '/'), trim($uri, '/')]);
     }
@@ -652,7 +652,7 @@ trait InteractsWithPage
      *
      * @return string
      */
-    protected function getStatusCode($uri)
+    private function getStatusCode($uri)
     {
         $headers = get_headers($this->fullUrl($uri));
 

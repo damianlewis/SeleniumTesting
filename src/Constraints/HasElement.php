@@ -88,7 +88,7 @@ class HasElement extends PageConstraint
      *
      * @return bool
      */
-    protected function hasAttributes(Selenium2TestCase_Element $element)
+    private function hasAttributes(Selenium2TestCase_Element $element)
     {
         foreach ($this->attributes as $name => $value) {
             if ($element->attribute($name) != $value) {

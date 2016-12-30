@@ -59,59 +59,6 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Adds the SeleniumTestCase document containing the DOM.
-     *
-     * @param SeleniumTestCase $document
-     */
-    protected function addDocument(SeleniumTestCase $document)
-    {
-        $this->document = $document;
-    }
-
-    /**
-     * Adds an array of Selenium2TestCase Element instances to the list of elements.
-     *
-     * @param array $elements
-     */
-    protected function addElements(array $elements)
-    {
-        foreach ($elements as $element) {
-            $this->add($element);
-        }
-    }
-
-    /**
-     * Check if the given element exists in the elements array.
-     *
-     * @param Selenium2TestCase_Element $needle
-     *
-     * @return bool
-     */
-    protected function hasElement(Selenium2TestCase_Element $needle)
-    {
-        $elements = array_filter($this->elements, function ($element) use ($needle) {
-            return $element->equals($needle);
-        });
-
-        return count($elements) > 0;
-    }
-
-    /**
-     * Adds a Selenium2TestCase Element instance to the list of elements.
-     *
-     * @param Selenium2TestCase_Element $element
-     */
-    protected function addElement(Selenium2TestCase_Element $element)
-    {
-        // Don't add duplicate elements in the Crawler
-        if ($this->hasElement($element)) {
-            return;
-        }
-
-        $this->elements[] = $element;
-    }
-
-    /**
      * Returns the first element in the list.
      *
      * @return Selenium2TestCase_Element
@@ -237,32 +184,6 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
-     * Find a select element by the given xpath, css selector, name or id attribute.
-     *
-     * @param mixed $selector
-     *
-     * @return Crawler
-     */
-    protected function findSelect($selector)
-    {
-        $element = null;
-        $criteria = [
-            'byXPath',
-            'byCssSelector',
-            'byName',
-            'byId'
-        ];
-
-        foreach ($criteria as $criterion) {
-            if (is_null($element)) {
-                $element = $this->findSelectByCriteria($selector, $criterion);
-            }
-        }
-
-        return $element;
-    }
-
-    /**
      * Selects link elements by the given link text.
      *
      * @param string $name
@@ -364,6 +285,85 @@ class Crawler implements Countable, IteratorAggregate
     }
 
     /**
+     * Adds the SeleniumTestCase document containing the DOM.
+     *
+     * @param SeleniumTestCase $document
+     */
+    private function addDocument(SeleniumTestCase $document)
+    {
+        $this->document = $document;
+    }
+
+    /**
+     * Adds an array of Selenium2TestCase Element instances to the list of elements.
+     *
+     * @param array $elements
+     */
+    private function addElements(array $elements)
+    {
+        foreach ($elements as $element) {
+            $this->add($element);
+        }
+    }
+
+    /**
+     * Check if the given element exists in the elements array.
+     *
+     * @param Selenium2TestCase_Element $needle
+     *
+     * @return bool
+     */
+    private function hasElement(Selenium2TestCase_Element $needle)
+    {
+        $elements = array_filter($this->elements, function ($element) use ($needle) {
+            return $element->equals($needle);
+        });
+
+        return count($elements) > 0;
+    }
+
+    /**
+     * Adds a Selenium2TestCase Element instance to the list of elements.
+     *
+     * @param Selenium2TestCase_Element $element
+     */
+    private function addElement(Selenium2TestCase_Element $element)
+    {
+        // Don't add duplicate elements in the Crawler
+        if ($this->hasElement($element)) {
+            return;
+        }
+
+        $this->elements[] = $element;
+    }
+
+    /**
+     * Find a select element by the given xpath, css selector, name or id attribute.
+     *
+     * @param mixed $selector
+     *
+     * @return Crawler
+     */
+    private function findSelect($selector)
+    {
+        $element = null;
+        $criteria = [
+            'byXPath',
+            'byCssSelector',
+            'byName',
+            'byId'
+        ];
+
+        foreach ($criteria as $criterion) {
+            if (is_null($element)) {
+                $element = $this->findSelectByCriteria($selector, $criterion);
+            }
+        }
+
+        return $element;
+    }
+
+    /**
      * Filter the elements by the given selector using the given criteria.
      *
      * @param string $selector
@@ -372,7 +372,7 @@ class Crawler implements Countable, IteratorAggregate
      * @return array
      *
      */
-    protected function filterByCriteria($selector, $criterion)
+    private function filterByCriteria($selector, $criterion)
     {
         try {
             $elements = $this->document->elements($this->document->using($criterion)->value($selector));
@@ -391,7 +391,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return null|Selenium2TestCase_Element
      */
-    protected function findSelectByCriteria($selector, $criterion)
+    private function findSelectByCriteria($selector, $criterion)
     {
         try {
             return $this->document->select(call_user_func_array([$this->document, $criterion], [$selector]));
@@ -407,7 +407,7 @@ class Crawler implements Countable, IteratorAggregate
      *
      * @return Crawler
      */
-    protected function createSubCrawler($elements)
+    private function createSubCrawler($elements)
     {
         $crawler = new static($this->document, $elements);
 

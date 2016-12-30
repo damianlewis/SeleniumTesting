@@ -100,7 +100,7 @@ class HasLink extends PageConstraint
      *
      * @return mixed
      */
-    protected function absoluteUrl()
+    private function absoluteUrl()
     {
         $url = rtrim($this->url, '/');
 

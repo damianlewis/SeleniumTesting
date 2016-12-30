@@ -218,7 +218,7 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      * @param  callable  $callback
      * @return void
      */
-    public function afterApplicationCreated(callable $callback)
+    protected function afterApplicationCreated(callable $callback)
     {
         $this->afterApplicationCreatedCallbacks[] = $callback;
 

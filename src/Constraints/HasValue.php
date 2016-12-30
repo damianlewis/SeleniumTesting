@@ -40,7 +40,7 @@ class HasValue extends FormFieldConstraint
      *
      * @throws \PHPUnit_Framework_ExpectationFailedException
      */
-    protected function getInputOrTextAreaValue(Crawler $crawler)
+    private function getInputOrTextAreaValue(Crawler $crawler)
     {
         $field = $this->field($crawler);
 

@@ -40,7 +40,7 @@ class IsSelected extends FormFieldConstraint
      *
      * @throws \PHPUnit_Framework_ExpectationFailedException
      */
-    protected function getSelectedValue(Crawler $crawler)
+    private function getSelectedValue(Crawler $crawler)
     {
         $field = $this->field($crawler);
 
@@ -56,7 +56,7 @@ class IsSelected extends FormFieldConstraint
      *
      * @return array
      */
-    protected function getSelectedValueFromSelect(Crawler $select)
+    private function getSelectedValueFromSelect(Crawler $select)
     {
         return $select->element()->selectedValues();
     }
@@ -68,7 +68,7 @@ class IsSelected extends FormFieldConstraint
      *
      * @return string|null
      */
-    protected function getCheckedValueFromRadioGroup(Crawler $radioGroup)
+    private function getCheckedValueFromRadioGroup(Crawler $radioGroup)
     {
         foreach ($radioGroup as $radio) {
             if ($radio->selected()) {
