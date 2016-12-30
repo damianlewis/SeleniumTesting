@@ -29,7 +29,7 @@ class HasInElement extends PageConstraint
     public function __construct($selector, $text)
     {
         $this->selector = $selector;
-        $this->text = $text;
+        $this->text = (string)$text;
     }
 
     /**
