@@ -47,7 +47,7 @@ class HasButton extends PageConstraint
      */
     protected function getFailureDescription()
     {
-        $description = "has a button with the text [{$this->text}]";
+        $description = "the page has a button with the text [{$this->text}]";
 
         return $description;
     }
@@ -59,7 +59,7 @@ class HasButton extends PageConstraint
      */
     protected function getReverseFailureDescription()
     {
-        $description = "does not have a button with the text [{$this->text}]";
+        $description = "the page does not have a button with the text [{$this->text}]";
 
         return $description;
     }
