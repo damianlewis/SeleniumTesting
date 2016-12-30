@@ -8,6 +8,7 @@ use SeleniumTesting\Constraints\ReversePageConstraint;
 use SeleniumTesting\Constraints\HasElement;
 use SeleniumTesting\Constraints\HasInElement;
 use SeleniumTesting\Constraints\HasLink;
+use SeleniumTesting\Constraints\HasButton;
 use SeleniumTesting\Constraints\HasSource;
 use SeleniumTesting\Constraints\HasText;
 use SeleniumTesting\Constraints\HasValue;
@@ -255,7 +256,7 @@ trait InteractsWithPage
     }
 
     /**
-     * Assert that a given link is not seen on the page.
+     * Assert that a given button is not seen on the page.
      *
      * @param  string      $text
      * @param  string|null $url
@@ -265,6 +266,31 @@ trait InteractsWithPage
     public function dontSeeLink($text, $url = null)
     {
         return $this->assertInPage(new HasLink($text, $url), true);
+    }
+
+    /**
+     * Assert that a given button is seen on the page.
+     *
+     * @param  string $text
+     * @param  bool   $negate
+     *
+     * @return $this
+     */
+    public function seeButton($text, $negate = false)
+    {
+        return $this->assertInPage(new HasButton($text), $negate);
+    }
+
+    /**
+     * Assert that a given link is not seen on the page.
+     *
+     * @param  string $text
+     *
+     * @return $this
+     */
+    public function dontSeeButton($text)
+    {
+        return $this->assertInPage(new HasButton($text), true);
     }
 
     /**
