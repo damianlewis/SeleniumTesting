@@ -578,6 +578,20 @@ trait InteractsWithPage
     }
 
     /**
+     * Wait for the given number of seconds.
+     *
+     * @param int $seconds
+     *
+     * @return $this
+     */
+    public function wait($seconds)
+    {
+        sleep($seconds);
+
+        return $this;
+    }
+
+    /**
      * Filter elements according to the given name or ID attribute.
      *
      * @param string       $name
