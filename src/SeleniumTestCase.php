@@ -115,7 +115,7 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      *
      * @var bool
      */
-    protected $screenShotCaptureEnabled;
+    protected $screenShotCaptureEnabled = false;
 
     /**
      * Creates the application.
