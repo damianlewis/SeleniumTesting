@@ -111,6 +111,13 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
     protected $envFilesChecked = false;
 
     /**
+     * Indicates if screen shot capture is enabled.
+     *
+     * @var bool
+     */
+    protected $screenShotCaptureEnabled;
+
+    /**
      * Creates the application.
      * Needs to be implemented by subclasses.
      *
@@ -129,6 +136,10 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
 
         if (! $this->app) {
             $this->refreshApplication();
+        }
+
+        if ($this->screenShotPath) {
+            $this->setUpScreenShotListening();
         }
 
         $this->setBrowser($this->browser);
@@ -200,11 +211,29 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
      */
     public function onNotSuccessfulTest($e)
     {
+        if (! $this->screenShotCaptureEnabled) {
+            return parent::onNotSuccessfulTest($e);
+        }
+
         if ($e instanceof PHPUnit_Framework_Exception) {
-            $fileName = $this->screenShotPath.DIRECTORY_SEPARATOR.get_class($this).'_'.date('Y-m-d\TH-i-s').'.png';
-            file_put_contents($fileName, $this->currentScreenshot());
-            $error = new PHPUnit_Framework_Error("Screen shot for [{$this->url()}] saved to: {$fileName}",
-                $e->getCode(), $e->getFile(), $e->getLine(), $e);
+            try {
+                $file = $this->screenShotPath.'/'.get_class($this).'__'.date('Y-m-d\TH-i-s').'.png';
+                file_put_contents($file, $this->currentScreenshot());
+
+                $error = new PHPUnit_Framework_Error("Screen shot for [{$this->url()}] saved to: {$file}",
+                    $e->getCode(),
+                    $e->getFile(),
+                    $e->getLine(),
+                    $e
+                );
+            } catch (Exception $screenShotException) {
+                $error = new PHPUnit_Framework_Error("Screen shot generation doesn't work.",
+                    $screenShotException->getCode(),
+                    $screenShotException->getFile(),
+                    $screenShotException->getLine(),
+                    $screenShotException
+                );
+            }
         } else {
             $error = $e;
         }
@@ -239,6 +268,8 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
     }
 
     /**
+     * Switches the application environment.
+     *
      * @return bool
      * @throws InvalidArgumentException|FileNotFoundException
      */
@@ -249,6 +280,11 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
         }
     }
 
+    /**
+     * Checks that all the required application environment files have been created.
+     *
+     * @throws FileNotFoundException
+     */
     protected function checkEnvFiles()
     {
         if (is_null($this->envFile)) {
@@ -276,5 +312,17 @@ abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
         }
 
         $this->envFilesChecked = true;
+    }
+
+    /**
+     * Sets up the directory to save screen shots into.
+     */
+    private function setUpScreenShotListening()
+    {
+        if (! file_exists($this->screenShotPath)) {
+            mkdir($this->screenShotPath);
+        }
+
+        $this->screenShotCaptureEnabled = file_exists($this->screenShotPath);
     }
 }
