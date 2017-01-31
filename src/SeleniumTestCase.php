@@ -9,12 +9,12 @@ use InvalidArgumentException;
 use PHPUnit_Extensions_Selenium2TestCase;
 use PHPUnit_Framework_Error;
 use PHPUnit_Framework_Exception;
-use SeleniumTesting\Concerns\InteractsWithPage;
+use SeleniumTesting\Concerns\InteractsWithPages;
 
 abstract class SeleniumTestCase extends PHPUnit_Extensions_Selenium2TestCase
 {
 
-    use InteractsWithPage;
+    use InteractsWithPages;
     use InteractsWithConsole;
 
     /**

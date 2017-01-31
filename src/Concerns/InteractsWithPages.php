@@ -20,7 +20,7 @@ use SeleniumTesting\InvalidArgumentException;
 use PHPUnit_Framework_ExpectationFailedException as PHPUnitException;
 use PHPUnit_Extensions_Selenium2TestCase_WebDriverException as Selenium2TestCase_WebDriverException;
 
-trait InteractsWithPage
+trait InteractsWithPages
 {
 
     /**
